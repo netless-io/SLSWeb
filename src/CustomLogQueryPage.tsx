@@ -21,7 +21,7 @@ function CustomLogQueryPage() {
     }
 
     const getDownloadHref = (): string => {
-        const url = new URL(`${baseUrl}/downloadLogs`);
+        const url = new URL(`${baseUrl}/customQuery/downloadLogs`);
         url.searchParams.append('from', `${timeRange[0].unix()}`);
         url.searchParams.append('to', `${timeRange[1].unix()}`);
         selNames.forEach(i => {
@@ -35,7 +35,7 @@ function CustomLogQueryPage() {
 
     const fetchData = () => {
         setLoading(true);
-        const url = new URL(`${baseUrl}/logs`);
+        const url = new URL(`${baseUrl}/customQuery/logs`);
         url.searchParams.append('from', `${timeRange[0].unix()}`);
         url.searchParams.append('to', `${timeRange[1].unix()}`);
         const customQuery = (document.getElementById('customQuery') as any).value;
@@ -49,6 +49,11 @@ function CustomLogQueryPage() {
         fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(res => {
+                if (res["error"] !== undefined) {
+                    message.error(`server error: ${res["error"]}`, 3);
+                    setLoading(false);
+                    return
+                }
                 let list = res["list"] as any[];
                 list = list.map((obj, index) => {
                     obj['key'] = `${index}`;
@@ -70,7 +75,6 @@ function CustomLogQueryPage() {
                         const start = d![0]!;
                         const end = d![1]!;
                         if (start?.unix() === end?.unix()) {
-                            console.log('same day');
                             const s = start?.startOf('day');
                             const e = end?.endOf('day');
                             setTimeRange([s, e]);

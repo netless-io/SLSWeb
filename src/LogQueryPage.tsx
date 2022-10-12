@@ -63,6 +63,7 @@ function LogQueryPage() {
             .then(res => {
                 if (res["error"] !== undefined) {
                     message.error(`server error: ${res["error"]}`, 3);
+                    setLoading(false);
                     return
                 }
                 let list = res["list"] as any[];
@@ -86,7 +87,6 @@ function LogQueryPage() {
                         const start = d![0]!;
                         const end = d![1]!;
                         if (start?.unix() === end?.unix()) {
-                            console.log('same day');
                             const s = start?.startOf('day');
                             const e = end?.endOf('day');
                             setTimeRange([s, e]);
