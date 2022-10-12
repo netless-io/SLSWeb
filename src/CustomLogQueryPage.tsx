@@ -65,7 +65,7 @@ function CustomLogQueryPage() {
             <Space direction='vertical' align="start" style={{ width: '100%' }}>
                 {queryElements(true)}
                 <Space>
-                    <div style={{ width: 100 }}>{'日志时间'}</div>
+                    <div style={{ width: 100 }}>{'日志时间(SLS)'}</div>
                     <IRangePicker onChange={d => setTimeRange([d![0]!, d![1]!])}/>
                 </Space>
 
