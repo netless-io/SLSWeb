@@ -61,6 +61,10 @@ function LogQueryPage() {
         fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(res => {
+                if (res["error"] !== undefined) {
+                    message.error(`server error: ${res["error"]}`, 3);
+                    return
+                }
                 let list = res["list"] as any[];
                 list = list.map((obj, index) => {
                     obj['key'] = `${index}`;
@@ -78,7 +82,18 @@ function LogQueryPage() {
                 {queryElements(false)}
                 <Space>
                     <div style={{ width: 100 }}>{'日志时间(SLS)'}</div>
-                    <IRangePicker onChange={d => setTimeRange([d![0]!, d![1]!])}/>
+                    <IRangePicker onChange={d => {
+                        const start = d![0]!;
+                        const end = d![1]!;
+                        if (start?.unix() === end?.unix()) {
+                            console.log('same day');
+                            const s = start?.startOf('day');
+                            const e = end?.endOf('day');
+                            setTimeRange([s, e]);
+                        } else {
+                            setTimeRange([start, end!]);
+                        }
+                    }} />
                 </Space>
 
                 <Checkbox.Group
@@ -111,12 +126,12 @@ function LogQueryPage() {
 
                 <Space direction='horizontal'>
                     <Button type='primary' onClick={() => {
-                        setTableParams({ current: 1 });
+                        setTableParams({ ...tableParams, current: 1 });
                         fetchData();
                     }}>
                         查询
                     </Button>
-                    <Button type='link' onClick={()=>download(getDownloadHref())}>下载</Button>
+                    <Button type='link' onClick={() => download(getDownloadHref())}>下载</Button>
                 </Space>
 
                 <Table
