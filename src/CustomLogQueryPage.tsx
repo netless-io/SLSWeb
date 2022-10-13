@@ -1,9 +1,10 @@
-import { Button, Space, Table, TablePaginationConfig, Checkbox, Row, Col, Radio, message } from 'antd';
+import { Button, Space, Table, TablePaginationConfig, Checkbox, Row, Col, Radio, message, Dropdown, Menu } from 'antd';
 import moment from "moment";
 import { useState } from 'react';
 import './App.css';
 import { IRangePicker } from './Components/RangePicker';
 import { defaultSelKeys, optionKeys } from './Const';
+import { DownloadMenu } from './DownloadMenu';
 import { baseUrl, download, getColumns, queryElements } from './utility';
 
 function CustomLogQueryPage() {
@@ -20,10 +21,11 @@ function CustomLogQueryPage() {
         setTableParams(pagination);
     }
 
-    const getDownloadHref = (): string => {
+    const getDownloadHref = (fileType: string): string => {
         const url = new URL(`${baseUrl}/customQuery/downloadLogs`);
         url.searchParams.append('from', `${timeRange[0].unix()}`);
         url.searchParams.append('to', `${timeRange[1].unix()}`);
+        url.searchParams.append('fileType', fileType);
         selNames.forEach(i => {
             url.searchParams.append("keys", i);
         })
@@ -81,7 +83,7 @@ function CustomLogQueryPage() {
                         } else {
                             setTimeRange([start, end!]);
                         }
-                    }}/>
+                    }} />
                 </Space>
 
                 <Checkbox.Group
@@ -119,7 +121,9 @@ function CustomLogQueryPage() {
                     }}>
                         查询
                     </Button>
-                    <Button type='link' onClick={() => download(getDownloadHref())}>下载</Button>
+                    <DownloadMenu
+                        onClick={e => download(getDownloadHref(e.key))}
+                    />
                 </Space>
 
                 <Table
