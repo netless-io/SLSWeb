@@ -1,5 +1,5 @@
 import { Button, Space, Table, TablePaginationConfig, Checkbox, Row, Col, Radio, message } from 'antd';
-import moment from "moment";
+import moment, { locale } from "moment";
 import { useState } from 'react';
 import './App.css';
 import { IRangePicker } from './Components/RangePicker';
@@ -72,7 +72,7 @@ function CustomLogQueryPage() {
             <Space direction='vertical' align="start" style={{ width: '100%' }}>
                 {queryElements(true)}
                 <Space>
-                    <div style={{ width: 100 }}>{'日志时间(SLS)'}</div>
+                    <div style={{ width: 100 }}>{'date'}</div>
                     <IRangePicker onChange={d => {
                         const start = d![0]!;
                         const end = d![1]!;
@@ -84,6 +84,7 @@ function CustomLogQueryPage() {
                             setTimeRange([start, end!]);
                         }
                     }} />
+                    <div>{Intl.DateTimeFormat().resolvedOptions().timeZone}</div>
                 </Space>
 
                 <Checkbox.Group
@@ -110,8 +111,8 @@ function CustomLogQueryPage() {
                     setFormatTime(!formatTime);
                     setColumns(getColumns(selNames, !formatTime));
                 }} value={formatTime ? 'locale' : 'unix'}>
-                    <Radio value={'locale'}>本地时间</Radio>
-                    <Radio value={'unix'}>Unix时间</Radio>
+                    <Radio value={'locale'}>local time</Radio>
+                    <Radio value={'unix'}>iso time</Radio>
                 </Radio.Group>
 
                 <Space direction='horizontal'>
@@ -119,7 +120,7 @@ function CustomLogQueryPage() {
                         setTableParams({ ...tableParams, current: 1 });
                         fetchData();
                     }}>
-                        查询
+                        Search
                     </Button>
                     <DownloadMenu
                         onClick={e => download(getDownloadHref(e.key))}

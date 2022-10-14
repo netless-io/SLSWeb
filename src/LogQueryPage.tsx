@@ -1,5 +1,5 @@
 import { Button, Space, Table, TablePaginationConfig, Checkbox, Row, Col, Radio, message } from 'antd';
-import moment from "moment";
+import moment, { locale } from "moment";
 import { useState } from 'react';
 import './App.css';
 import { IRangePicker } from './Components/RangePicker';
@@ -84,7 +84,7 @@ function LogQueryPage() {
             <Space direction='vertical' align="start" style={{ width: '100%' }}>
                 {queryElements(false)}
                 <Space>
-                    <div style={{ width: 100 }}>{'日志时间(SLS)'}</div>
+                    <div style={{ width: 100 }}>{'date'}</div>
                     <IRangePicker onChange={d => {
                         const start = d![0]!;
                         const end = d![1]!;
@@ -96,6 +96,7 @@ function LogQueryPage() {
                             setTimeRange([start, end!]);
                         }
                     }} />
+                    <div>{Intl.DateTimeFormat().resolvedOptions().timeZone}</div>
                 </Space>
 
                 <Checkbox.Group
@@ -122,8 +123,8 @@ function LogQueryPage() {
                     setFormatTime(!formatTime);
                     setColumns(getColumns(selNames, !formatTime));
                 }} value={formatTime ? 'locale' : 'unix'}>
-                    <Radio value={'locale'}>本地时间</Radio>
-                    <Radio value={'unix'}>Unix时间</Radio>
+                    <Radio value={'locale'}>local time</Radio>
+                    <Radio value={'unix'}>iso time</Radio>
                 </Radio.Group>
 
                 <Space direction='horizontal'>
@@ -131,12 +132,12 @@ function LogQueryPage() {
                         setTableParams({ ...tableParams, current: 1 });
                         fetchData();
                     }}>
-                        查询
+                        Search
                     </Button>
                     <DownloadMenu
                         onClick={e => download(getDownloadHref(e.key))}
                     />
-                    <div style={{ fontSize: 12 }}>当前下载限制最多为10000条，需要更多数据请切换到自定义查询</div>
+                    <div style={{ fontSize: 12 }}>Current download count limit is 10000. Go to 'Custom Room Log Query' page if you want more.</div>
                 </Space>
 
                 <div className='table-container' style={{ width: '98%'}}>

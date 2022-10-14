@@ -7,10 +7,10 @@ export function IRangePicker(props: RangePickerProps) {
     return <RangePicker
         style={{ width: 300 }}
         ranges={{
-            '15分钟': [moment().subtract(15, 'minutes'), moment()],
-            '今天': [moment().startOf('day'), moment()],
-            '一周': [moment().subtract(1, 'week'), moment()],
-            '一月': [moment().subtract(1, 'month'), moment()],
+            'Yesterday': [moment().startOf('day').subtract(1), moment().startOf('day')],
+            'Today': [moment().startOf('day'), moment()],
+            'This Week': [moment().subtract(1, 'week'), moment()],
+            'This Month': [moment().subtract(1, 'month'), moment()],
         }}
         defaultValue={[moment().startOf('day'), moment()]}
         disabledDate={current => {

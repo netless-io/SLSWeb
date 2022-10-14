@@ -5,14 +5,14 @@ export function DownloadMenu(props: MenuProps) {
         overlay={<Menu
             {...props}
             items={[{
-                label: '下载 xlsx',
+                label: 'download xlsx',
                 key: 'xlsx'
             }, {
-                label: '下载 csv',
+                label: 'download csv',
                 key: 'csv',
             }]}
         />}
     >
-        <Button type='link' onClick={e => e.preventDefault()}>下载</Button>
+        <Button type='link' onClick={e => e.preventDefault()}>Download</Button>
     </Dropdown>
 }
