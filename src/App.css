@@ -1,10 +1,5 @@
 @import '~antd/dist/antd.css';
 
-.App {
-  text-align: start;
-  padding: 14px;
-}
-
 .LogQuery {
   text-align: start;
 }

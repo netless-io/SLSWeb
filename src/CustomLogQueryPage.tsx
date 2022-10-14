@@ -1,4 +1,4 @@
-import { Button, Space, Table, TablePaginationConfig, Checkbox, Row, Col, Radio, message, Dropdown, Menu } from 'antd';
+import { Button, Space, Table, TablePaginationConfig, Checkbox, Row, Col, Radio, message } from 'antd';
 import moment from "moment";
 import { useState } from 'react';
 import './App.css';
@@ -126,22 +126,25 @@ function CustomLogQueryPage() {
                     />
                 </Space>
 
-                <Table
-                    columns={columns}
-                    dataSource={listSource}
-                    onChange={handlerTableChange}
-                    pagination={{
-                        showTotal: () => <div>共 {total} 条</div>,
-                        position: ['bottomLeft'],
-                        pageSize: tableParams.pageSize,
-                        current: tableParams.current,
-                        total: listSource.length
-                    }}
-                    scroll={{ y: 480 }}
-                    size={'small'}
-                    bordered={true}
-                    loading={loading}>
-                </Table>
+                <div className='table-container' style={{ width: '98%' }}>
+                    <Table
+                        style={{ overflowX: 'scroll' }}
+                        columns={columns}
+                        dataSource={listSource}
+                        onChange={handlerTableChange}
+                        pagination={{
+                            showTotal: () => <div>共 {total} 条</div>,
+                            position: ['bottomLeft'],
+                            pageSize: tableParams.pageSize,
+                            current: tableParams.current,
+                            total: listSource.length
+                        }}
+                        scroll={{ y: 480 }}
+                        size={'small'}
+                        bordered={true}
+                        loading={loading}>
+                    </Table>
+                </div>
             </Space>
         </div>
     )
