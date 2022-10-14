@@ -147,7 +147,7 @@ function LogQueryPage() {
                         position: ['bottomLeft'],
                         pageSize: tableParams.pageSize,
                         current: tableParams.current,
-                        total: listSource.length
+                        total: total
                     }}
                     scroll={{ y: 480 }}
                     size={'small'}
