@@ -136,6 +136,7 @@ function LogQueryPage() {
                     <DownloadMenu
                         onClick={e => download(getDownloadHref(e.key))}
                     />
+                    <div style={{fontSize: 12}}>当前下载限制最多为10000条，需要更多数据请切换到自定义查询</div>
                 </Space>
 
                 <Table
