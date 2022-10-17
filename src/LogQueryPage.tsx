@@ -9,8 +9,8 @@ import { baseUrl, download, getColumns, queryElements } from './utility';
 
 function LogQueryPage() {
     const [selNames, setSelNames] = useState(defaultSelKeys);
-    const [formatTime, setFormatTime] = useState(true);
-    const [columns, setColumns] = useState(getColumns(selNames, formatTime));
+    const [usingLocalTime, setUsingLocalTime] = useState(true);
+    const [columns, setColumns] = useState(getColumns(selNames, usingLocalTime));
     const [timeRange, setTimeRange] = useState<moment.Moment[]>([moment().startOf('day'), moment()]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -26,6 +26,9 @@ function LogQueryPage() {
         const url = new URL(`${baseUrl}/downloadLogs`);
         url.searchParams.append('from', `${timeRange[0].unix()}`);
         url.searchParams.append('to', `${timeRange[1].unix()}`);
+        if (usingLocalTime) {
+            url.searchParams.append('timeLocation', `${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
+        }
         url.searchParams.append('fileType', fileType);
         selNames.forEach(i => {
             url.searchParams.append("keys", i);
@@ -104,7 +107,7 @@ function LogQueryPage() {
                     onChange={list => {
                         const names = list as string[];
                         setSelNames(names);
-                        setColumns(getColumns(names, formatTime));
+                        setColumns(getColumns(names, usingLocalTime));
                     }}
                 >
                     <Space direction='vertical'>
@@ -120,9 +123,9 @@ function LogQueryPage() {
                 </Checkbox.Group>
 
                 <Radio.Group onChange={() => {
-                    setFormatTime(!formatTime);
-                    setColumns(getColumns(selNames, !formatTime));
-                }} value={formatTime ? 'locale' : 'unix'}>
+                    setUsingLocalTime(!usingLocalTime);
+                    setColumns(getColumns(selNames, !usingLocalTime));
+                }} value={usingLocalTime ? 'locale' : 'unix'}>
                     <Radio value={'locale'}>local time</Radio>
                     <Radio value={'unix'}>iso time</Radio>
                 </Radio.Group>
