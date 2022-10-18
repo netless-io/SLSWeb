@@ -5,6 +5,7 @@ import './App.css';
 import { defaultUsingLocalTime, QueryForm } from '../Components/QueryForm';
 import { defaultSelKeys } from '../Const';
 import { baseUrl, getColumns } from '../utility';
+import { useTranslation } from 'react-i18next';
 
 function LogQueryPage() {
     const [query, setQuery] = useState(undefined);
@@ -13,6 +14,7 @@ function LogQueryPage() {
     const [loading, setLoading] = useState(false);
     const [listSource, setListSource] = useState<any[]>([]);
     const [tableParams, setTableParams] = useState<TablePaginationConfig>({ current: 1, pageSize: 30 })
+    const { t } = useTranslation();
 
     const handlerTableChange = (pagination: TablePaginationConfig) => {
         setTableParams(pagination);
@@ -96,7 +98,7 @@ function LogQueryPage() {
                         dataSource={listSource}
                         onChange={handlerTableChange}
                         pagination={{
-                            showTotal: () => <div>共 {total} 条</div>,
+                            showTotal: () => <div>{t('page.counter', {count: total})}</div>,
                             position: ['bottomLeft'],
                             pageSize: tableParams.pageSize,
                             current: tableParams.current,

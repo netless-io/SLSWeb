@@ -19,5 +19,6 @@
     "page.normal.download.tips": "当前下载条目限制为 10000 条，如果需要更多数据请到 ’自定义查询‘ 中完成查询",
     "page.custom.query": "查询语句",
     "page.custom.query.placeholder": "类似 'uuid:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx | select * from log limit 30000'",
-    "page.custom.query.warning": "请输入正确的查询语句"
+    "page.custom.query.warning": "请输入正确的查询语句",
+    "page.counter": "共 {{count}} 条"
 }

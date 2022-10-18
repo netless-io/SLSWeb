@@ -19,5 +19,6 @@
     "page.normal.download.tips": "Current download count limit is 10000. Go to 'Custom Room Log Query' page if you want more",
     "page.custom.query": "Query",
     "page.custom.query.placeholder": "like 'uuid:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx | select * from log limit 30000'",
-    "page.custom.query.warning": "Please enter the correct query statement"
+    "page.custom.query.warning": "Please enter the correct query statement",
+    "page.counter": "Total {{count}} items"
 }
