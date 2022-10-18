@@ -1,0 +1,23 @@
+{
+    "app.page.normal": "普通查询",
+    "app.page.custom": "自定义查询",
+    "app.selectLanguage": "语言",
+    "page.normal.uuid": "房间 UUID",
+    "page.normal.uuid.placeholder": "房间 UUID，长度是32",
+    "page.normal.uuid.warnings": "请输入 32 位 Room UUID",
+    "page.normal.suid": "用户 suid",
+    "page.normal.suid.placeholder": "用户 suid， 选填",
+    "page.normal.fields": "字段",
+    "page.normal.date": "日志时间",
+    "page.normal.timeLocation": "时区",
+    "page.normal.timeLocation.local": "本地时间",
+    "page.normal.timeLocation.ISO": "ISO时间",
+    "page.normal.search": "查询",
+    "page.normal.download": "下载",
+    "page.normal.download.csv": "下载 csv",
+    "page.normal.download.xlsx": "下载 xlsx",
+    "page.normal.download.tips": "当前下载条目限制为 10000 条，如果需要更多数据请到 ’自定义查询‘ 中完成查询",
+    "page.custom.query": "查询语句",
+    "page.custom.query.placeholder": "类似 'uuid:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx | select * from log limit 30000'",
+    "page.custom.query.warning": "请输入正确的查询语句"
+}

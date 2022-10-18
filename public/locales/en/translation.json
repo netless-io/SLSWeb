@@ -1,0 +1,23 @@
+{
+    "app.page.normal": "Room Log Query",
+    "app.page.custom": "Custom Room Log Query",
+    "app.selectLanguage": "Language",
+    "page.normal.uuid": "Room UUID",
+    "page.normal.uuid.placeholder": "Room UUID with a length of 32",
+    "page.normal.uuid.warnings": "Please enter the length 32 Room UUID",
+    "page.normal.suid": "User suid",
+    "page.normal.suid.placeholder": "User suid, optional",
+    "page.normal.fields": "Fields",
+    "page.normal.date": "Log Date",
+    "page.normal.timeLocation": "Time zone",
+    "page.normal.timeLocation.local": "Local",
+    "page.normal.timeLocation.ISO": "ISO",
+    "page.normal.search": "Search",
+    "page.normal.download": "Download",
+    "page.normal.download.csv": "Download csv",
+    "page.normal.download.xlsx": "Download xlsx",
+    "page.normal.download.tips": "Current download count limit is 10000. Go to 'Custom Room Log Query' page if you want more",
+    "page.custom.query": "Query",
+    "page.custom.query.placeholder": "like 'uuid:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx | select * from log limit 30000'",
+    "page.custom.query.warning": "Please enter the correct query statement"
+}
