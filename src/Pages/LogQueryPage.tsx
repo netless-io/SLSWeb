@@ -6,6 +6,7 @@ import { defaultUsingLocalTime, QueryForm } from '../Components/QueryForm';
 import { defaultSelKeys } from '../Const';
 import { baseUrl, getColumns } from '../utility';
 import { useTranslation } from 'react-i18next';
+import { LogTimeLineChart } from '../Components/LogTimeLineChart';
 
 function LogQueryPage() {
     const [query, setQuery] = useState(undefined);
@@ -84,14 +85,15 @@ function LogQueryPage() {
                         setQuery(value);
                     }}
                     onFinish={() => {
-                        setTableParams({...tableParams, current: 1});
+                        setTableParams({ ...tableParams, current: 1 });
                         fetchData();
                     }}
                     downloadHref={getDownloadHref}
                     showCustomQuery={false}
                 />
 
-                <div className='table-container' style={{ width: '98%' }}>
+                <LogTimeLineChart source={listSource} />
+                {/* <div className='table-container' style={{ width: '98%' }}>
                     <Table
                         style={{ overflowX: 'scroll' }}
                         columns={columns}
@@ -109,7 +111,7 @@ function LogQueryPage() {
                         bordered={true}
                         loading={loading}>
                     </Table>
-                </div>
+                </div> */}
             </Space>
         </div>
     )
