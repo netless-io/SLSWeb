@@ -220,7 +220,7 @@ export function LogTimeLineChart(props: LogTimeLineChartProps) {
     useEffect(() => {
         if (selectedNodeIndex === undefined) { return; }
         const msgs = allData[selectedNodeIndex.uid][selectedNodeIndex.index].keyMessages;
-        setPortal(ReactDOM.createPortal(<LogChartTimeLine keyMessages={msgs} />, timelineContainer));
+        setPortal(ReactDOM.createPortal(<LogChartTimeLine keyMessages={msgs} uid={selectedNodeIndex.uid} />, timelineContainer));
     }, [JSON.stringify(selectedNodeIndex)]);
 
     useEffect(() => {
@@ -341,7 +341,9 @@ export function LogTimeLineChart(props: LogTimeLineChartProps) {
                             const y = mouseY <= timeLineHeight ? rect.y : rect.y - timeLineHeight;
                             return [x, y];
                         },
+                        triggerOn: 'mousemove',
                         enterable: true,
+                        appendToBody: false,
                         formatter: (i: Object, _) => {
                             if (!i.hasOwnProperty('dataIndex')) {
                                 return undefined;
@@ -351,7 +353,10 @@ export function LogTimeLineChart(props: LogTimeLineChartProps) {
                             }
                             const uid = (i as any).seriesName;
                             const index = (i as any).dataIndex as number;
-                            setSelectedNodeIndex({ index, uid });
+                            const s = { index, uid };
+                            if (JSON.stringify(s) !== JSON.stringify(selectedNodeIndex)) {
+                                setSelectedNodeIndex({ index, uid });
+                            }
                             if (allData[uid][index].count <= 0) {
                                 return undefined;
                             }
