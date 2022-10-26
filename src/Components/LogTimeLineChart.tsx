@@ -288,7 +288,8 @@ export function LogTimeLineChart(props: LogTimeLineChartProps) {
                         axisLine: { show: true, },
                     },
                     yAxis: {
-                        data: selectedDataUids,
+                        // TODO: Single user display bug
+                        data: selectedDataUids.length === 1 ? [...selectedDataUids, ''] : selectedDataUids,
                         show: true, type: 'category',
                         gridIndex: 0,
                         axisLine: { show: false, },
