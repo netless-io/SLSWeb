@@ -12,6 +12,12 @@
         1
     ],
     [
+        "change room phase to disconnecting",
+        "User Disconnect",
+        "normal",
+        2
+    ],
+    [
         "change room phase to disconnected",
         "Disconnected",
         "normal",
@@ -28,12 +34,6 @@
         "WS Error",
         "error",
         3
-    ],
-    [
-        "disconnect",
-        "User Disconnect",
-        "normal",
-        2
     ],
     [
         "Error: remote heartbeat timeout",
