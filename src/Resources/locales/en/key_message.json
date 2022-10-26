@@ -1,0 +1,10 @@
+{
+    "Reconnecting": "Reconnecting",
+    "Connected": "Connected",
+    "Disconnected": "Disconnected",
+    "Connect Failed": "Connect Failed",
+    "WS Error": "WS Error",
+    "User Disconnect": "User Disconnect",
+    "Heartbeat Timeout": "Heartbeat Timeout",
+    "Pong Timeout": "Pong Timeout"
+}

@@ -1,0 +1,50 @@
+[
+    [
+        "change room phase to reconnecting",
+        "Reconnecting",
+        "normal",
+        2
+    ],
+    [
+        "change room phase to connected",
+        "Connected",
+        "normal",
+        1
+    ],
+    [
+        "change room phase to disconnected",
+        "Disconnected",
+        "normal",
+        1
+    ],
+    [
+        "connect failed",
+        "Connect Failed",
+        "error",
+        3
+    ],
+    [
+        "websocket received error",
+        "WS Error",
+        "error",
+        3
+    ],
+    [
+        "disconnect",
+        "User Disconnect",
+        "normal",
+        2
+    ],
+    [
+        "Error: remote heartbeat timeout",
+        "Heartbeat Timeout",
+        "error",
+        3
+    ],
+    [
+        "Error: pong timeout",
+        "Pong Timeout",
+        "error",
+        3
+    ]
+]

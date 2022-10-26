@@ -1,4 +1,4 @@
-import { Space, Table, TablePaginationConfig, message } from 'antd';
+import { Table, TablePaginationConfig, message } from 'antd';
 import moment from "moment";
 import { useState } from 'react';
 import './App.css';
@@ -6,13 +6,14 @@ import { defaultUsingLocalTime, QueryForm } from '../Components/QueryForm';
 import { defaultSelKeys } from '../Const';
 import { baseUrl, getColumns } from '../utility';
 import { useTranslation } from 'react-i18next';
+import { LogItemType } from '../Components/LogItemType';
 
 function LogQueryPage() {
     const [query, setQuery] = useState(undefined);
     const [columns, setColumns] = useState(getColumns(defaultSelKeys, defaultUsingLocalTime));
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [listSource, setListSource] = useState<any[]>([]);
+    const [listSource, setListSource] = useState<LogItemType[]>([]);
     const [tableParams, setTableParams] = useState<TablePaginationConfig>({ current: 1, pageSize: 30 })
     const { t } = useTranslation();
 
@@ -76,22 +77,21 @@ function LogQueryPage() {
 
     return (
         <div className="LogQuery">
-            <Space direction='vertical' align="start" style={{ width: '100%' }}>
-                <QueryForm
-                    onValuesChange={(_, value) => {
-                        const localTime = value["timeLocation"] !== undefined;
-                        setColumns(getColumns(value["keys"], localTime));
-                        setQuery(value);
-                    }}
-                    onFinish={() => {
-                        setTableParams({...tableParams, current: 1});
-                        fetchData();
-                    }}
-                    downloadHref={getDownloadHref}
-                    showCustomQuery={false}
-                />
-
-                <div className='table-container' style={{ width: '98%' }}>
+            <QueryForm
+                onValuesChange={(_, value) => {
+                    const localTime = value["timeLocation"] !== undefined;
+                    setColumns(getColumns(value["keys"], localTime));
+                    setQuery(value);
+                }}
+                onFinish={() => {
+                    setTableParams({ ...tableParams, current: 1 });
+                    fetchData();
+                }}
+                downloadHref={getDownloadHref}
+                showCustomQuery={false}
+            />
+            
+            <div className='table-container' style={{ width: '98%' }}>
                     <Table
                         style={{ overflowX: 'scroll' }}
                         columns={columns}
@@ -110,7 +110,6 @@ function LogQueryPage() {
                         loading={loading}>
                     </Table>
                 </div>
-            </Space>
         </div>
     )
 }

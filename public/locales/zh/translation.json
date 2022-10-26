@@ -1,6 +1,7 @@
 {
     "app.page.normal": "普通查询",
     "app.page.custom": "自定义查询",
+    "app.page.chart": "图表查询",
     "app.selectLanguage": "语言",
     "page.normal.uuid": "房间 UUID",
     "page.normal.uuid.placeholder": "房间 UUID，长度是32",
@@ -20,5 +21,8 @@
     "page.custom.query": "查询语句",
     "page.custom.query.placeholder": "类似 'uuid:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx | select * from log limit 30000'",
     "page.custom.query.warning": "请输入正确的查询语句",
-    "page.counter": "共 {{count}} 条"
+    "page.counter": "共 {{count}} 条",
+    "page.chart.checkall": "全选",
+    "page.chart.userpick.placeholder": "请选择你需要查看的用户，共有{{count}}用户",
+    "page.chart.result.tips": "一共查询到{{count}}条日志，单次查询上限为{{total}}条"
 }

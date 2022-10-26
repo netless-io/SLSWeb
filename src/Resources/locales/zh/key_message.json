@@ -1,0 +1,15 @@
+{
+    "Reconnecting": "开始重连",
+    "Connected": "连接成功",
+    "Disconnected": "连接断开",
+    "Connect Failed": "连接失败",
+    "WS Error": "WebSocket 错误",
+    "User Disconnect": "用户断开",
+    "Heartbeat Timeout": "心跳超时",
+    "Pong Timeout": "Pong 超时"
+}
+
+
+
+
+
