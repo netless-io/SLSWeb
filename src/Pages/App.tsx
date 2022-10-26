@@ -9,6 +9,7 @@ import './App.css';
 import LogQueryPage from '../Pages/LogQueryPage';
 import CustomLogQueryPage from '../Pages/CustomLogQueryPage';
 import { useTranslation } from 'react-i18next';
+import { ChartQueryPage } from './ChartQueryPage';
 
 const lngs = {
   en: {
@@ -21,7 +22,7 @@ const lngs = {
   }
 };
 
-const lngItems = Object.keys(lngs).map(e=> {
+const lngItems = Object.keys(lngs).map(e => {
   return lngs[e];
 });
 
@@ -44,10 +45,16 @@ function App() {
   const pages = [
     {
       key: '1',
-      label: t('app.page.normal')
+      label: t('app.page.normal'),
+      page: <LogQueryPage />
     }, {
       key: '2',
-      label: t('app.page.custom')
+      label: t('app.page.custom'),
+      page: <CustomLogQueryPage />
+    }, {
+      key: '3',
+      label: t('app.page.chart'),
+      page: <ChartQueryPage />
     }
   ];
 
@@ -64,14 +71,14 @@ function App() {
 
     <Content className="site-layout" style={{ padding: '0 14px', marginTop: 60 }}>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 720 }}>
-        {sel === '1' ? <LogQueryPage /> : <CustomLogQueryPage />}
+        {pages.find((o) => o.key === sel).page}
       </div>
     </Content>
 
     <Footer>
       <Dropdown overlay={lngsMenu} trigger={['click']}>
         <Typography.Link>
-          {t('app.selectLanguage') + ": "+  lngs[i18n.resolvedLanguage].label}
+          {t('app.selectLanguage') + ": " + lngs[i18n.resolvedLanguage].label}
         </Typography.Link>
       </Dropdown>
     </Footer>

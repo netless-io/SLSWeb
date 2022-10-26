@@ -1,6 +1,7 @@
 {
     "app.page.normal": "Room Log Query",
     "app.page.custom": "Custom Room Log Query",
+    "app.page.chart": "Chart Query",
     "app.selectLanguage": "Language",
     "page.normal.uuid": "Room UUID",
     "page.normal.uuid.placeholder": "Room UUID with a length of 32",
@@ -20,5 +21,8 @@
     "page.custom.query": "Query",
     "page.custom.query.placeholder": "like 'uuid:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx | select * from log limit 30000'",
     "page.custom.query.warning": "Please enter the correct query statement",
-    "page.counter": "Total {{count}} items"
+    "page.counter": "Total {{count}} items",
+    "page.chart.checkall": "Check All",
+    "page.chart.userpick.placeholder": "Please select the user you need to view, there are {{count}} users",
+    "page.chart.result.tips": "A total of {{count}} logs are queried, with a single query limit of {{total}} logs"
 }
