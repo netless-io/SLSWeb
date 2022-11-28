@@ -8,6 +8,7 @@ import { Suspense, useState } from 'react';
 import './App.css';
 import LogQueryPage from '../Pages/LogQueryPage';
 import CustomLogQueryPage from '../Pages/CustomLogQueryPage';
+import UsageInvestigatePage from '../Pages/UsageInvestigatePage';
 import { useTranslation } from 'react-i18next';
 import { ChartQueryPage } from './ChartQueryPage';
 
@@ -55,6 +56,10 @@ function App() {
       key: '3',
       label: t('app.page.chart'),
       page: <ChartQueryPage />
+    }, {
+      key: '4',
+      label: t('app.page.usage'),
+      page: <UsageInvestigatePage />
     }
   ];
 

@@ -2,6 +2,7 @@
     "app.page.normal": "Room Log Query",
     "app.page.custom": "Custom Room Log Query",
     "app.page.chart": "Chart Query",
+    "app.page.usage": "Usage Query",
     "app.selectLanguage": "Language",
     "page.normal.uuid": "Room UUID",
     "page.normal.uuid.placeholder": "Room UUID with a length of 32",
@@ -24,5 +25,15 @@
     "page.counter": "Total {{count}} items",
     "page.chart.checkall": "Check All",
     "page.chart.userpick.placeholder": "Please select the user you need to view, there are {{count}} users",
-    "page.chart.result.tips": "A total of {{count}} logs are queried, with a single query limit of {{total}} logs"
+    "page.chart.result.tips": "A total of {{count}} logs are queried, with a single query limit of {{total}} logs",
+    "page.normal.team.warnings": "Please enter the Team UUID",
+    "page.normal.region": "Region",
+    "page.usage.count": "Usage (Minutes)",
+    "page.usage.updateDate": "Last Update Date",
+    "cn-hz": "cn-hz",
+    "us-sv": "us-sv",
+    "in-mum": "in-mum",
+    "sg": "sg",
+    "gb-lon": "gb-lon",
+    "page.usage.tips": "Display up to 100 pieces of data per query"
 }

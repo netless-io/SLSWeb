@@ -2,6 +2,7 @@
     "app.page.normal": "普通查询",
     "app.page.custom": "自定义查询",
     "app.page.chart": "图表查询",
+    "app.page.usage": "用量排查",
     "app.selectLanguage": "语言",
     "page.normal.uuid": "房间 UUID",
     "page.normal.uuid.placeholder": "房间 UUID，长度是32",
@@ -24,5 +25,15 @@
     "page.counter": "共 {{count}} 条",
     "page.chart.checkall": "全选",
     "page.chart.userpick.placeholder": "请选择你需要查看的用户，共有{{count}}用户",
-    "page.chart.result.tips": "一共查询到{{count}}条日志，单次查询上限为{{total}}条"
+    "page.chart.result.tips": "一共查询到{{count}}条日志，单次查询上限为{{total}}条",
+    "page.normal.team.warnings": "请输入 Team UUID",
+    "page.usage.count": "用量统计（分钟）",
+    "page.usage.updateDate": "最后更新时间",
+    "page.normal.region": "区域",
+    "cn-hz": "杭州",
+    "us-sv": "美国硅谷",
+    "in-mum": "印度孟买",
+    "sg": "新加坡",
+    "gb-lon": "英国伦敦",
+    "page.usage.tips": "每次查询最多显示100条数据"
 }
