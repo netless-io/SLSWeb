@@ -4,13 +4,20 @@ import {
   Menu,
   Typography,
 } from 'antd';
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import './App.css';
 import LogQueryPage from '../Pages/LogQueryPage';
 import CustomLogQueryPage from '../Pages/CustomLogQueryPage';
 import UsageInvestigatePage from '../Pages/UsageInvestigatePage';
 import { useTranslation } from 'react-i18next';
 import { ChartQueryPage } from './ChartQueryPage';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  useNavigate,
+  useLocation
+} from 'react-router-dom'
 
 const lngs = {
   en: {
@@ -31,7 +38,8 @@ const { Header, Content, Footer } = Layout;
 
 function App() {
   const { t, i18n } = useTranslation();
-  const [sel, setSel] = useState('1');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const lngsMenu = (<Menu
     selectable
@@ -45,38 +53,40 @@ function App() {
 
   const pages = [
     {
-      key: '1',
+      key: 'normal',
       label: t('app.page.normal'),
-      page: <LogQueryPage />
     }, {
-      key: '2',
+      key: 'custom',
       label: t('app.page.custom'),
-      page: <CustomLogQueryPage />
     }, {
-      key: '3',
+      key: 'chart',
       label: t('app.page.chart'),
-      page: <ChartQueryPage />
     }, {
-      key: '4',
+      key: 'usage',
       label: t('app.page.usage'),
-      page: <UsageInvestigatePage />
     }
   ];
 
   return <Layout>
     <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
       <Menu
-        onSelect={info => setSel(info.key)}
+        onSelect={info => {
+          navigate(info.key)
+        }}
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={[pages[0].key]}
+        selectedKeys={pages.filter(i => {
+          return location.pathname.includes(i.key);
+        }).map(i=>i.key)}
         items={pages}
       />
     </Header>
 
     <Content className="site-layout" style={{ padding: '0 14px', marginTop: 60 }}>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 720 }}>
-        {pages.find((o) => o.key === sel).page}
+        <div id="detail">
+          <Outlet />
+        </div>
       </div>
     </Content>
 
@@ -90,10 +100,45 @@ function App() {
   </Layout>
 }
 
+function ErrorPage() {
+  // const error = useRouteError();
+
+  return <div id="error-page">
+    <h1>Oops! Bad path</h1>
+  </div>
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "normal",
+        element: <LogQueryPage />
+      },
+      {
+        path: "custom",
+        element: <CustomLogQueryPage />
+      },
+      {
+        path: "chart",
+        element: <ChartQueryPage />
+      },
+      {
+        path: "usage",
+        element: <UsageInvestigatePage />
+      }
+    ]
+  }
+]);
+
 export default function WrappedApp() {
   return (
     <Suspense fallback="... is loading">
-      <App />
+      <RouterProvider router={router} />
     </Suspense>
   );
 }
+
