@@ -68,7 +68,6 @@ export function QueryForm(props: QueryElementsProps) {
 
             <Form.Item
                 label={t('page.normal.date')}
-                name='range'
             >
                 <Space>
                     <Form.Item name='range' noStyle>

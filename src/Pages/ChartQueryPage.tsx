@@ -75,7 +75,6 @@ export function ChartQueryPage() {
 
             <Form.Item
                 label={t('page.normal.date')}
-                name='date'
             >
                 <Space>
                     <Form.Item
