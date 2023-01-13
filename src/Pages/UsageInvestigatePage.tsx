@@ -1,7 +1,6 @@
 import { Form, Input, Space, DatePicker, Button, Spin, Select, message, Table, TablePaginationConfig } from "antd";
-import { t } from "i18next";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UsageItemType } from "../Components/UsageItemType";
 import { baseUrl } from "../utility";
@@ -23,7 +22,7 @@ function UsageInvestigatePage() {
     const [total, setTotal] = useState(0);
 
     function fetchData() {
-        if (query === undefined) { return ; }
+        if (query === undefined) { return; }
         setLoading(true);
         const url = new URL(`${baseUrl}/teamRooms`);
         const date = query['date'] as moment.Moment;
@@ -133,7 +132,7 @@ function UsageInvestigatePage() {
                             render: (e: any) => {
                                 const n = parseInt(e);
                                 if (n <= 0) {
-                                    return <div/>
+                                    return <div />
                                 }
                                 const date = new Date(n);
                                 const str = date.toISOString();
@@ -145,7 +144,6 @@ function UsageInvestigatePage() {
                     pagination={{
                         showTotal: () => <div>{t('page.counter', { count: total })}</div>,
                         position: ['bottomLeft'],
-                        pageSize: 30,
                         total: total
                     }}
                     scroll={{ y: 480 }}
