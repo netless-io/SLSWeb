@@ -7,21 +7,44 @@ import { DownloadMenu } from "./DownloadMenu";
 import { download } from "../utility";
 import { IRangePicker } from "./RangePicker";
 
-export const defaultUsingLocalTime = true;
-
-export function defaultQueryElementsValue(localTime: boolean) {
-    return {
-        'keys': defaultSelKeys,
-        'range': [moment().startOf('day'), moment()],
-        'timeLocation': localTime ? Intl.DateTimeFormat().resolvedOptions().timeZone : undefined
-    }
+interface PreferenceType {
+    timelocation: string
+    displayKeys: string[]
 }
 
 interface QueryElementsProps {
+    defaultValue?: any
     showCustomQuery: boolean
     onFinish: (any) => void
     downloadHref: (string) => string
     onValuesChange?: (changedValues: any, values: any) => void
+}
+
+const defaultTimelocation = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+export const ISOTimelocation = 'ISO';
+
+export function getPreference(): PreferenceType{
+    const raw = window.localStorage.getItem('sls-preference');
+    if (raw === null) {
+        return {
+            timelocation: defaultTimelocation,
+            displayKeys: defaultSelKeys
+        };
+    }
+    const result = JSON.parse(raw) as PreferenceType;
+    return result;
+}
+
+export function updatePreference(displayKeys?: string[], timelocation?: string) {
+    const p = getPreference();
+    if (displayKeys !== undefined) {
+        p.displayKeys = displayKeys;
+    }
+    if (timelocation !== undefined) {
+        p.timelocation = timelocation
+    }
+    window.localStorage.setItem('sls-preference', JSON.stringify(p));
 }
 
 export function QueryForm(props: QueryElementsProps) {
@@ -35,7 +58,7 @@ export function QueryForm(props: QueryElementsProps) {
             onFinish={props.onFinish}
             onValuesChange={props.onValuesChange}
             labelCol={{ span: 2 }}
-            initialValues={defaultQueryElementsValue(defaultUsingLocalTime)}
+            initialValues={props.defaultValue}
         >
             {
                 props.showCustomQuery ?
@@ -98,7 +121,7 @@ export function QueryForm(props: QueryElementsProps) {
             >
                 <Radio.Group>
                     <Radio value={timeZone}>{t('page.normal.timeLocation.local')}</Radio>
-                    <Radio value={undefined}>{t('page.normal.timeLocation.ISO')}</Radio>
+                    <Radio value={'ISO'}>{t('page.normal.timeLocation.ISO')}</Radio>
                 </Radio.Group>
             </Form.Item>
 

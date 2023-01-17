@@ -35,5 +35,6 @@
     "in-mum": "in-mum",
     "sg": "sg",
     "gb-lon": "gb-lon",
-    "page.usage.tips": "Display up to 100 pieces of data per query"
+    "page.usage.tips": "Display up to 100 pieces of data per query",
+    "download.start": "Start downloading..."
 }

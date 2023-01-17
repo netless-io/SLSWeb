@@ -4,12 +4,12 @@ import { useState } from 'react';
 import './App.css';
 import { defaultSelKeys } from '../Const';
 import { baseUrl, getColumns } from '../utility';
-import { defaultUsingLocalTime, QueryForm } from '../Components/QueryForm';
+import { QueryForm, getPreference } from '../Components/QueryForm';
 import { useTranslation } from 'react-i18next';
 
 function CustomLogQueryPage() {
     const [query, setQuery] = useState(undefined);
-    const [columns, setColumns] = useState(getColumns(defaultSelKeys, defaultUsingLocalTime));
+    const [columns, setColumns] = useState(getColumns(defaultSelKeys, getPreference().timelocation === undefined));
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [listSource, setListSource] = useState<any[]>([]);
