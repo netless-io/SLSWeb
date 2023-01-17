@@ -107,7 +107,7 @@ function LogQueryPage() {
     }
 
     const getDownloadHref = (fileType: string): string => {
-        message.info(t('download start'));
+        message.info(t('download.start'));
         const url = new URL(`${baseUrl}/downloadLogs`);
         query.keys.forEach(element => {
             url.searchParams.append('keys', element);

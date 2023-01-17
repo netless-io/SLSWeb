@@ -105,7 +105,7 @@ function CustomLogQueryPage() {
     }
 
     const getDownloadHref = (fileType: string): string => {
-        message.info(t('download start'));
+        message.info(t('download.start'));
         const url = new URL(`${baseUrl}/customQuery/downloadLogs`);
         query.keys.forEach(element => {
             url.searchParams.append('keys', element);
