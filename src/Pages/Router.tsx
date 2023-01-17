@@ -6,7 +6,7 @@ import {
 import { ChartQueryLoader, ChartQueryPage } from './ChartQueryPage';
 import CustomLogQueryPage, { CustomLogQueryLoader } from './CustomLogQueryPage';
 import LogQueryPage, { LogQueryLoader } from './LogQueryPage';
-import UsageInvestigatePage from './UsageInvestigatePage';
+import UsageInvestigatePage, { UsageInvestLoader } from './UsageInvestigatePage';
 import Root from './Root';
 
 export const Pages = [
@@ -34,7 +34,10 @@ export const PageElement = (path: string) => {
         }
         case 'usage': return {
             path,
-            element: <UsageInvestigatePage />
+            element: <UsageInvestigatePage />,
+            loader: async (args: LoaderFunctionArgs) => {
+                return await UsageInvestLoader(args.request.url);
+            }
         }
         case 'normal': return {
             path: 'normal',

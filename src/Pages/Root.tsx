@@ -1,6 +1,6 @@
 import { Menu, Layout, Dropdown, Typography } from "antd";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation, Outlet, useParams, useNavigation } from "react-router-dom";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Pages } from "./Router";
 
 const lngs = {

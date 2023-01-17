@@ -1,9 +1,10 @@
-import { Form, Input, Space, DatePicker, Button, Spin, Select, message, Table, TablePaginationConfig } from "antd";
-import moment from "moment";
-import { useState } from "react";
+import { Form, Input, Space, DatePicker, Button, Spin, Select, Table } from "antd";
+import moment, { Moment } from "moment";
 import { useTranslation } from "react-i18next";
 import { UsageItemType } from "../Components/UsageItemType";
 import { baseUrl } from "../utility";
+import { useLoaderData, useNavigation, useNavigate } from "react-router-dom";
+import { getPreference } from "../Components/QueryForm";
 
 const regions = [
     "cn-hz",
@@ -13,39 +14,83 @@ const regions = [
     "gb-lon"
 ]
 
-function UsageInvestigatePage() {
-    const { t } = useTranslation();
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const [query, setQuery] = useState(undefined);
-    const [loading, setLoading] = useState(false);
-    const [usageListSource, setUsageListSource] = useState<UsageItemType[] | undefined>(undefined);
-    const [total, setTotal] = useState(0);
+export interface UsageInvestType {
+    team: string
+    region: string
+    from: string
+    timeLocation: string
+    date: Moment
+}
 
-    function fetchData() {
-        if (query === undefined) { return; }
-        setLoading(true);
-        const url = new URL(`${baseUrl}/teamRooms`);
-        const date = query['date'] as moment.Moment;
-        const from = date.startOf('day').unix();
-        const to = date.endOf('day').unix();
-        url.searchParams.append('from', from.toString());
-        url.searchParams.append('to', to.toString());
-        url.searchParams.append('region', query['region']);
-        url.searchParams.append('team', query['team']);
+interface UsageInvestResult {
+    count: number
+    list: any[]
+    query?: UsageInvestType
+}
 
+function emptyUsageInvestQuery(): UsageInvestType {
+    return {
+        team: "",
+        region: 'cn-hz',
+        from: moment().startOf('day').unix().toString(),
+        timeLocation: getPreference().timelocation,
+        date: moment().startOf('day')
+    }
+}
+
+export async function UsageInvestLoader(requestUrl: string) {
+    const fromUrl = new URL(requestUrl);
+    if (fromUrl.search.length <= 0) {
+        return Promise.resolve({ count: 0, list: [], query: emptyUsageInvestQuery() });
+    }
+    const urlSearchParams = fromUrl.searchParams;
+    const query = Object.fromEntries(urlSearchParams.entries()) as unknown as UsageInvestType;
+    query.date = moment.unix(Number(query.from));
+    const preference = getPreference();
+    query.timeLocation = preference.timelocation;
+
+    const url = new URL(`${baseUrl}/teamRooms`);
+    url.searchParams.append('from', query.from);
+    url.searchParams.append('to', (Number(query.from) + 3600 * 24).toString());
+    url.searchParams.append('region', query.region);
+    url.searchParams.append('team', query.team);
+
+    return new Promise((resolver, error) => {
         fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(res => {
                 if (res["error"] !== undefined) {
-                    message.error(`server error: ${res["error"]}`, 3);
-                    setLoading(false);
-                    return
+                    error(`server error: ${res["error"]}`);
+                    return;
                 }
                 let list = res["list"] as UsageItemType[];
-                setTotal(res["count"]);
-                setUsageListSource(list);
-                setLoading(false);
+                list = list.map((obj, index) => {
+                    obj['key'] = `${index}`;
+                    return obj;
+                });
+                resolver({
+                    count: res["count"],
+                    list: list,
+                    query
+                })
             });
+    })
+}
+
+function UsageInvestigatePage() {
+    let { count, list, query } = useLoaderData() as UsageInvestResult;
+
+    const { t } = useTranslation();
+    const { state } = useNavigation();
+    const navigate = useNavigate();
+
+    function navigateToResultPath() {
+        const url = new URL(`${baseUrl}/teamRooms`);
+        url.searchParams.append('from', query.from);
+        url.searchParams.append('region', query.region);
+        url.searchParams.append('team', query.team);
+        const newPath = '/usage' + url.search;
+        navigate(newPath);
     }
 
     return (
@@ -53,13 +98,12 @@ function UsageInvestigatePage() {
             <Form
                 name='team info'
                 labelCol={{ span: 2 }}
-                onFinish={fetchData}
-                onValuesChange={(_, value) => {
-                    setQuery(value);
+                onFinish={(value) => {
+                    query = value;
+                    query.from = (value['date'] as Moment).unix().toString();
+                    navigateToResultPath()
                 }}
-                initialValues={{
-                    'date': moment().startOf('day')
-                }}
+                initialValues={query}
             >
                 <Form.Item
                     label={'Team'}
@@ -73,7 +117,6 @@ function UsageInvestigatePage() {
                 <Form.Item
                     label={t('page.normal.region')}
                     name="region"
-                    initialValue={regions[0]}
                 >
                     <Select
                         style={{ width: 300 }}
@@ -96,7 +139,7 @@ function UsageInvestigatePage() {
                         >
                             <DatePicker />
                         </Form.Item>
-                        <div>{timeZone}</div>
+                        <div>{query.timeLocation}</div>
                     </Space>
                 </Form.Item>
 
@@ -110,7 +153,7 @@ function UsageInvestigatePage() {
                 </Form.Item>
             </Form>
 
-            <Spin spinning={loading}>
+            <Spin spinning={state === 'loading'}>
                 <Table
                     style={{ overflowX: 'scroll' }}
                     columns={[
@@ -139,11 +182,11 @@ function UsageInvestigatePage() {
                             }
                         }
                     ]}
-                    dataSource={usageListSource}
+                    dataSource={list}
                     pagination={{
-                        showTotal: () => <div>{t('page.counter', { count: total })}</div>,
+                        showTotal: () => <div>{t('page.counter', { count })}</div>,
                         position: ['bottomLeft'],
-                        total: total
+                        total: count
                     }}
                     scroll={{ y: 480 }}
                     size={'small'}

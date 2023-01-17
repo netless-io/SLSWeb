@@ -41,8 +41,6 @@ export async function ChartQueryLoader(requestUrl: string) {
     const preference = getPreference();
     query.timeLocation = preference.timelocation;
 
-    console.log({query});
-
     const url = new URL(`${baseUrl}/customQuery/logs`);
     url.searchParams.append('from', query.from);
     url.searchParams.append('to', (Number(query.from) + 3600*24).toString());
