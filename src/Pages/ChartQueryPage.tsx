@@ -1,60 +1,105 @@
-import { Button, DatePicker, Form, Input, message, Space, Spin } from 'antd';
-import moment from 'moment';
-import { useState } from 'react';
+import { Button, DatePicker, Form, Input, Space, Spin } from 'antd';
+import moment, { Moment } from 'moment';
 import { useTranslation } from 'react-i18next';
 import { LogItemType } from '../Components/LogItemType';
 import { LogTimeLineChart } from '../Components/LogTimeLineChart';
 import { baseUrl } from '../utility';
+import { getPreference } from '../Components/QueryForm';
+import { useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
 
-const queryLogsMaxCountPerTime = 10000;
-export function ChartQueryPage() {
-    const { t } = useTranslation();
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const [query, setQuery] = useState(undefined);
-    const [loading, setLoading] = useState(false);
-    const [chartListSource, setChartListSource] = useState<LogItemType[] | undefined>(undefined);
+export interface ChartQueryType {
+    uuid: string
+    suid: string | undefined
+    from: string
+    timeLocation: string
+    date: Moment
+}
 
-    const fetchData = () => {
-        setLoading(true);
-        const url = new URL(`${baseUrl}/customQuery/logs`);
-        const date = query['date'] as moment.Moment;
-        const from = date.startOf('day').unix();
-        const to = date.endOf('day').unix();
-        url.searchParams.append('from', from.toString());
-        url.searchParams.append('to', to.toString());
-        const uuid = query["uuid"];
-        let suidQuery: string = "";
-        if (query["suid"] !== undefined) {
-            suidQuery = `and suid: ${query["suid"]}`;
-        }
-        const slsQuery = `uuid: ${uuid} ${suidQuery} | select * from log limit ${queryLogsMaxCountPerTime}`;
-        url.searchParams.append('customQuery', slsQuery);
+interface ChartQueryResult {
+    list: any[]
+    query?: ChartQueryType
+}
 
+function emptyChartQuery(): ChartQueryType {
+    return {
+        uuid: "",
+        suid: undefined,
+        from: moment().startOf('day').unix().toString(),
+        timeLocation: getPreference().timelocation,
+        date: moment().startOf('day')
+    }
+}
+
+export async function ChartQueryLoader(requestUrl: string) {
+    const fromUrl = new URL(requestUrl);
+    if (fromUrl.search.length <= 0) {
+        return Promise.resolve({ count: 0, list: [], query: emptyChartQuery() });
+    }
+    const urlSearchParams = fromUrl.searchParams;
+    const query = Object.fromEntries(urlSearchParams.entries()) as unknown as ChartQueryType;
+    query.date = moment.unix(Number(query.from));
+    const preference = getPreference();
+    query.timeLocation = preference.timelocation;
+
+    console.log({query});
+
+    const url = new URL(`${baseUrl}/customQuery/logs`);
+    url.searchParams.append('from', query.from);
+    url.searchParams.append('to', (Number(query.from) + 3600*24).toString());
+    const uuid = query.uuid;
+    let suidQuery: string = "";
+    if (query.suid !== undefined && query.suid !== null && query.suid.length > 0) {
+        suidQuery = `and suid: ${query.suid}`;
+    }
+    const slsQuery = `uuid: ${uuid} ${suidQuery} | select * from log limit ${queryLogsMaxCountPerTime}`;
+    url.searchParams.append('customQuery', slsQuery);
+
+    return new Promise((resolver, error) => {
         fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(res => {
                 if (res["error"] !== undefined) {
-                    message.error(`server error: ${res["error"]}`, 3);
-                    setLoading(false);
-                    return
+                    error(`server error: ${res["error"]}`);
+                    return;
                 }
                 let list = res["list"] as LogItemType[];
-                setChartListSource(list);
-                setLoading(false);
+                resolver({
+                    list: list,
+                    query
+                })
             });
+    })
+}
+
+const queryLogsMaxCountPerTime = 10000;
+export function ChartQueryPage() {
+    let { list, query } = useLoaderData() as ChartQueryResult;
+
+    const { t } = useTranslation();
+    const { state } = useNavigation();
+    const navigate = useNavigate();
+
+    const navigateToNewPath = () => {
+        const url = new URL(`${baseUrl}/customQuery/logs`);
+        url.searchParams.append('uuid', query.uuid);
+        if (query.suid !== undefined) {
+            url.searchParams.append('suid', query.suid);
+        }
+        url.searchParams.append('from', query.from);
+        const newPath = '/chart' + url.search;
+        navigate(newPath);
     }
 
     return <div>
         <Form
             name='room info'
             labelCol={{ span: 2 }}
-            onFinish={fetchData}
-            onValuesChange={(_, value) => {
-                setQuery(value);
+            onFinish={(value) => {
+                query = value;
+                query.from = (value['date'] as Moment).unix().toString();
+                navigateToNewPath();
             }}
-            initialValues={{
-                'date': moment().startOf('day')
-            }}
+            initialValues={query}
         >
             <Form.Item
                 label={t('page.normal.uuid')}
@@ -83,28 +128,26 @@ export function ChartQueryPage() {
                     >
                         <DatePicker />
                     </Form.Item>
-                    <div>{timeZone}</div>
+                    <div>{query.timeLocation}</div>
                 </Space>
             </Form.Item>
-
-
 
             <Form.Item >
                 <Space>
                     <Button type='primary' htmlType='submit'>{t('page.normal.search')}</Button>
                     {
-                        chartListSource &&
+                        list &&
                         <div style={{ color: 'gray' }}>
-                            {t('page.chart.result.tips', { count: chartListSource.length, total: queryLogsMaxCountPerTime })}
+                            {t('page.chart.result.tips', { count: list.length, total: queryLogsMaxCountPerTime })}
                         </div>
                     }
                 </Space>
             </Form.Item>
         </Form>
 
-        <Spin spinning={loading}>
+        <Spin spinning={state === 'loading'}>
             <LogTimeLineChart
-                source={chartListSource}
+                source={list}
             />
         </Spin>
     </div>

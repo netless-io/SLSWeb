@@ -3,7 +3,7 @@ import {
     createBrowserRouter,
     redirect,
 } from 'react-router-dom'
-import { ChartQueryPage } from './ChartQueryPage';
+import { ChartQueryLoader, ChartQueryPage } from './ChartQueryPage';
 import CustomLogQueryPage, { CustomLogQueryLoader } from './CustomLogQueryPage';
 import LogQueryPage, { LogQueryLoader } from './LogQueryPage';
 import UsageInvestigatePage from './UsageInvestigatePage';
@@ -27,7 +27,10 @@ export const PageElement = (path: string) => {
         }
         case 'chart': return {
             path,
-            element: <ChartQueryPage />
+            element: <ChartQueryPage />,
+            loader: async (args: LoaderFunctionArgs) => {
+                return await ChartQueryLoader(args.request.url);
+            }
         }
         case 'usage': return {
             path,
