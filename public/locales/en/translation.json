@@ -36,5 +36,7 @@
     "sg": "sg",
     "gb-lon": "gb-lon",
     "page.usage.tips": "Display up to 100 pieces of data per query",
-    "download.start": "Start downloading..."
+    "download.start": "Start downloading...",
+    "turnToRoomLog": "Jump to the room log",
+    "turnToUsageDetail": "Jump to the usage detail"
 }

@@ -58,9 +58,10 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
-        errorElement: <div id="error-page">
-            <h1>Oops! Bad path</h1>
-        </div>,
+        errorElement:
+            <div id="error-page">
+                <h1>Oops! Bad path</h1>
+            </div>,
         children: [
             {
                 index: true,

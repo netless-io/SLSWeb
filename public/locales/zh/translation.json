@@ -36,5 +36,7 @@
     "sg": "新加坡",
     "gb-lon": "英国伦敦",
     "page.usage.tips": "每次查询最多显示100条数据",
-    "download.start": "开始下载..."
+    "download.start": "开始下载...",
+    "turnToRoomLog": "跳转到房间日志",
+    "turnToUsageDetail": "跳转到用量详情"
 }

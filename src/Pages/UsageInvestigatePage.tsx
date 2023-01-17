@@ -1,10 +1,11 @@
-import { Form, Input, Space, DatePicker, Button, Spin, Select, Table } from "antd";
+import { Form, Input, Space, DatePicker, Button, Spin, Select, Table, Dropdown, Menu, message } from "antd";
 import moment, { Moment } from "moment";
 import { useTranslation } from "react-i18next";
 import { UsageItemType } from "../Components/UsageItemType";
 import { baseUrl } from "../utility";
 import { useLoaderData, useNavigation, useNavigate } from "react-router-dom";
 import { getPreference } from "../Components/QueryForm";
+import { URLSearchParams } from "url";
 
 const regions = [
     "cn-hz",
@@ -160,7 +161,43 @@ function UsageInvestigatePage() {
                         {
                             title: t('page.normal.uuid'),
                             dataIndex: "uuid",
-                            key: "uuid"
+                            key: "uuid",
+                            render: (uuid) => {
+                                return <Dropdown
+                                    trigger={['click']}
+                                    overlay={<Menu items={[
+                                        {
+                                            label: t('turnToRoomLog'),
+                                            key: 'log',
+                                            onClick: ()=>{
+                                                const match = list.find((e)=>{
+                                                    return e['uuid'] === uuid;
+                                                });
+                                                console.log({match});
+                                                const mid = moment.unix(match['timestamp'] / 1000);
+                                                const to = mid.add(1, 'day') ;
+                                                const from = to.subtract(1, 'day');
+                                                const url = new URL(`${baseUrl}/normal`);
+                                                url.searchParams.append('uuid', uuid);
+                                                url.searchParams.append('from', from.unix().toString());
+                                                url.searchParams.append('to', to.unix().toString());
+                                                url.searchParams.append('page', '1');
+                                                url.searchParams.append('pageSize', '30');
+                                                const path = '/normal' + url.search;
+                                                navigate(path);
+                                            }
+                                        },
+                                        {
+                                            label: t('turnToUsageDetail'),
+                                            key: 'detail',
+                                            onClick: ()=>{
+                                                message.info('developing');
+                                            }
+                                        },
+                                    ]} />}>
+                                        <a onClick={(e)=>e.preventDefault()}>{uuid}</a>
+                                </Dropdown>
+                            }
                         },
                         {
                             title: t('page.usage.count'),
