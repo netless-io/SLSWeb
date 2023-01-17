@@ -96,6 +96,7 @@ export async function LogQueryLoader(requestUrl: string) {
 
 function LogQueryPage() {
     let { count, list, query } = useLoaderData() as LogQueryResult;
+
     const [columns, setColumns] = useState(getColumns(query.keys, query.timeLocation !== ISOTimelocation));
     const { t } = useTranslation();
     const { state } = useNavigation();
@@ -106,7 +107,7 @@ function LogQueryPage() {
     }
 
     const getDownloadHref = (fileType: string): string => {
-        message.info('download start');
+        message.info(t('download start'));
         const url = new URL(`${baseUrl}/downloadLogs`);
         query.keys.forEach(element => {
             url.searchParams.append('keys', element);

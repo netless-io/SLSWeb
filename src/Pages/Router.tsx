@@ -4,7 +4,7 @@ import {
     redirect,
 } from 'react-router-dom'
 import { ChartQueryPage } from './ChartQueryPage';
-import CustomLogQueryPage from './CustomLogQueryPage';
+import CustomLogQueryPage, { CustomLogQueryLoader } from './CustomLogQueryPage';
 import LogQueryPage, { LogQueryLoader } from './LogQueryPage';
 import UsageInvestigatePage from './UsageInvestigatePage';
 import Root from './Root';
@@ -20,7 +20,10 @@ export const PageElement = (path: string) => {
     switch (path) {
         case 'custom': return {
             path,
-            element: <CustomLogQueryPage />
+            element: <CustomLogQueryPage />,
+            loader: async (args: LoaderFunctionArgs) => {
+                return await CustomLogQueryLoader(args.request.url);
+            }
         }
         case 'chart': return {
             path,

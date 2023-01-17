@@ -4,81 +4,155 @@ import { useState } from 'react';
 import './App.css';
 import { defaultSelKeys } from '../Const';
 import { baseUrl, getColumns } from '../utility';
-import { QueryForm, getPreference } from '../Components/QueryForm';
+import { ISOTimelocation, QueryForm, getPreference, updatePreference } from '../Components/QueryForm';
 import { useTranslation } from 'react-i18next';
+import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
 
-function CustomLogQueryPage() {
-    const [query, setQuery] = useState(undefined);
-    const [columns, setColumns] = useState(getColumns(defaultSelKeys, getPreference().timelocation === undefined));
-    const [total, setTotal] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [listSource, setListSource] = useState<any[]>([]);
-    const [tableParams, setTableParams] = useState<TablePaginationConfig>({ current: 1, pageSize: 30 })
-    const { t } = useTranslation();
+export interface CustomLogQueryType {
+    customQuery: string
+    from: string
+    to: string
+    range: moment.Moment[]
+    keys: string[]
+    timeLocation: string
+    page: string
+    pageSize: string
+}
 
-    const handlerTableChange = (pagination: TablePaginationConfig) => {
-        setTableParams(pagination);
+interface CustomLogQueryResult {
+    count: number
+    list: any[]
+    query?: CustomLogQueryType
+}
+
+function emptyCustomLogQuery(): CustomLogQueryType {
+    return {
+        from: moment().startOf('day').unix().toString(),
+        to: moment().unix().toString(),
+        range: [
+            moment().startOf('day'),
+            moment()],
+        keys: getPreference().displayKeys,
+        timeLocation: getPreference().timelocation,
+        page: '1',
+        pageSize: '30',
+        customQuery: ''
     }
+}
 
-    const getDownloadHref = (fileType: string): string => {
-        const url = new URL(`${baseUrl}/customQuery/downloadLogs`);
-        url.searchParams.append('customQuery', query["customQuery"]);
-        const from = (query['range'][0] as moment.Moment).unix();
-        const to = (query['range'][1] as moment.Moment).unix();
-        url.searchParams.append('from', from.toString());
-        url.searchParams.append('to', to.toString());
-        url.searchParams.append('fileType', fileType);
-
-        query['keys'].forEach(element => {
-            url.searchParams.append('keys', element);
-        });
-        if (query["timeLocation"] !== undefined) {
-            url.searchParams.append('timeLocation', query["timeLocation"]);
-        }
-        return url.toString()
+export async function CustomLogQueryLoader(requestUrl: string) {
+    const fromUrl = new URL(requestUrl);
+    if (fromUrl.search.length <= 0) {
+        return Promise.resolve({ count: 0, list: [], query: emptyCustomLogQuery() });
     }
+    const urlSearchParams = fromUrl.searchParams;
+    const query = Object.fromEntries(urlSearchParams.entries()) as unknown as CustomLogQueryType;
+    if (query.from === query.to) {
+        const redirectUrl = new URL(requestUrl.replace(`to=${query.to}`, `to=${Number(query.to) + 3600 * 24}`));
+        const newPath = redirectUrl.pathname + redirectUrl.search;
+        return redirect(newPath);
+    }
+    query.range = [
+        moment.unix(Number(query.from)),
+        moment.unix(Number(query.to))
+    ];
+    const preference = getPreference();
+    query.keys = preference.displayKeys;
+    query.timeLocation = preference.timelocation;
 
-    const fetchData = () => {
-        setLoading(true);
-        const url = new URL(`${baseUrl}/customQuery/logs`);
-        const from = (query['range'][0] as moment.Moment).unix();
-        const to = (query['range'][1] as moment.Moment).unix();
-        url.searchParams.append('from', from.toString());
-        url.searchParams.append('to', to.toString());
-        url.searchParams.append('customQuery', query["customQuery"]);
-
+    const url = new URL(`${baseUrl}/customQuery/logs`);
+    if (query.customQuery.length <= 0) {
+        return Promise.resolve({ count: 0, list: [], query });
+    }
+    if (query.customQuery !== null && query.customQuery !== undefined && query.customQuery.length > 0) {
+        url.searchParams.append('customQuery', query.customQuery);
+    }
+    url.searchParams.append('from', query.from);
+    url.searchParams.append('to', query.to);
+    url.searchParams.append('page', query.page.toString());
+    url.searchParams.append('pageSize', query.pageSize.toString());
+    return new Promise((resolver, error) => {
         fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(res => {
                 if (res["error"] !== undefined) {
-                    message.error(`server error: ${res["error"]}`, 3);
-                    setLoading(false);
-                    return
+                    error(`server error: ${res["error"]}`);
+                    return;
                 }
                 let list = res["list"] as any[];
                 list = list.map((obj, index) => {
                     obj['key'] = `${index}`;
                     return obj;
+                });
+                resolver({
+                    count: res["count"],
+                    list: list,
+                    query
                 })
-                setTotal(res["count"]);
-                setListSource(list);
-                setLoading(false);
             });
+    })
+}
+
+function CustomLogQueryPage() {
+    const [columns, setColumns] = useState(getColumns(defaultSelKeys, getPreference().timelocation === undefined));
+    const { t } = useTranslation();
+    const { state } = useNavigation();
+    const navigate = useNavigate();
+    let { count, list, query } = useLoaderData() as CustomLogQueryResult;
+
+    const handlerTableChange = (pagination: TablePaginationConfig) => {
+        navigateToSearchPage(pagination.current, pagination.pageSize);
+    }
+
+    const getDownloadHref = (fileType: string): string => {
+        message.info(t('download start'));
+        const url = new URL(`${baseUrl}/customQuery/downloadLogs`);
+        query.keys.forEach(element => {
+            url.searchParams.append('keys', element);
+        });
+        url.searchParams.append('from', query.from);
+        url.searchParams.append('to', query.to);
+        url.searchParams.append('fileType', fileType);
+        url.searchParams.append('customQuery', query.customQuery);
+        if (query["timeLocation"] !== ISOTimelocation) {
+            url.searchParams.append('timeLocation', query["timeLocation"]);
+        }
+        return url.toString()
+    }
+
+    const navigateToSearchPage = (page: number, pageSize: number) => {
+        const url = new URL(`${baseUrl}/customQuery/logs`);
+
+        url.searchParams.append('customQuery', query.customQuery);
+        if (query.customQuery !== undefined) {
+            url.searchParams.append('customQuery', query.customQuery);
+        }
+        url.searchParams.append('from', query.from);
+        url.searchParams.append('to', query.to);
+        url.searchParams.append('page', page.toString());
+        url.searchParams.append('pageSize', pageSize.toString());
+        const newPath = '/custom' + url.search;
+        navigate(newPath);
     }
 
     return (
         <div className="LogQuery">
             <Space direction='vertical' align="start" style={{ width: '100%' }}>
                 <QueryForm
+                    defaultValue={query}
                     showCustomQuery={true}
-                    onFinish={() => {
-                        setTableParams({ ...tableParams, current: 1 });
-                        fetchData();
+                    onFinish={(value) => {
+                        query = value;
+                        const startTime = (value['range'][0] as moment.Moment).unix();
+                        const endTime = (value['range'][1] as moment.Moment).unix()
+                        query.from = startTime.toString();
+                        query.to = endTime.toString();
+                        navigateToSearchPage(1, 30);
                     }}
                     onValuesChange={(_, value) => {
-                        const localTime = value["timeLocation"] !== undefined;
-                        setColumns(getColumns(value["keys"], localTime));
-                        setQuery(value);
+                        const timelocation = value["timeLocation"] as string;
+                        setColumns(getColumns(value["keys"], timelocation !== ISOTimelocation));
+                        updatePreference(value["keys"], timelocation);
                     }}
                     downloadHref={getDownloadHref}
                 />
@@ -87,19 +161,19 @@ function CustomLogQueryPage() {
                     <Table
                         style={{ overflowX: 'scroll' }}
                         columns={columns}
-                        dataSource={listSource}
+                        dataSource={list}
                         onChange={handlerTableChange}
                         pagination={{
-                            showTotal: () => <div>{t('page.counter', {count: total})}</div>,
+                            showTotal: () => <div>{t('page.counter', { count })}</div>,
                             position: ['bottomLeft'],
-                            pageSize: tableParams.pageSize,
-                            current: tableParams.current,
-                            total: listSource.length
+                            pageSize: query && Number(query.pageSize),
+                            current: query && Number(query.page),
+                            total: count
                         }}
                         scroll={{ y: 480 }}
                         size={'small'}
                         bordered={true}
-                        loading={loading}>
+                        loading={state === 'loading'}>
                     </Table>
                 </div>
             </Space>
