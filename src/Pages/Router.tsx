@@ -8,12 +8,14 @@ import CustomLogQueryPage, { CustomLogQueryLoader } from './CustomLogQueryPage';
 import LogQueryPage, { LogQueryLoader } from './LogQueryPage';
 import UsageInvestigatePage, { UsageInvestLoader } from './UsageInvestigatePage';
 import Root from './Root';
+import UsageDetailPage, { UsageDetailLoader } from './UsageDetailPage';
 
 export const Pages = [
     'normal',
     'custom',
     'chart',
-    'usage'
+    'usage',
+    'usageDetail',
 ];
 
 export const PageElement = (path: string) => {
@@ -37,6 +39,13 @@ export const PageElement = (path: string) => {
             element: <UsageInvestigatePage />,
             loader: async (args: LoaderFunctionArgs) => {
                 return await UsageInvestLoader(args.request.url);
+            }
+        }
+        case 'usageDetail': return {
+            path,
+            element: <UsageDetailPage />,
+            loader: async (args: LoaderFunctionArgs) => {
+                return await UsageDetailLoader(args.request.url);
             }
         }
         case 'normal': return {

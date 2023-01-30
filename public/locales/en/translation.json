@@ -3,6 +3,7 @@
     "app.page.custom": "Custom Room Log Query",
     "app.page.chart": "Chart Query",
     "app.page.usage": "Usage Query",
+    "app.page.usageDetail": "UsageDetail",
     "app.selectLanguage": "Language",
     "page.normal.uuid": "Room UUID",
     "page.normal.uuid.placeholder": "Room UUID with a length of 32",
@@ -38,5 +39,15 @@
     "page.usage.tips": "Display up to 100 pieces of data per query",
     "download.start": "Start downloading...",
     "turnToRoomLog": "Jump to the room log",
-    "turnToUsageDetail": "Jump to the usage detail"
+    "turnToUsageDetail": "Jump to the usage detail",
+    "date": "Date",
+    "cumulativeSessionsCount": "Total duration",
+    "cumulativeWritersCount": "Cumulative Write duration ",
+    "peakSessionsCount": "Peak count",
+    "peakWritersCount": "Peak write count",
+    "cumulativeReadonlyCount": "Cumulative Read duration",
+    "peakReadonlyCount": "Peak readonly count",
+    "detail": "Detail",
+    "readonly": "Readonly",
+    "write": "Interaction"
 }

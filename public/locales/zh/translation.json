@@ -3,6 +3,7 @@
     "app.page.custom": "自定义查询",
     "app.page.chart": "图表查询",
     "app.page.usage": "用量排查",
+    "app.page.usageDetail": "用量详情",
     "app.selectLanguage": "语言",
     "page.normal.uuid": "房间 UUID",
     "page.normal.uuid.placeholder": "房间 UUID，长度是32",
@@ -38,5 +39,15 @@
     "page.usage.tips": "每次查询最多显示100条数据",
     "download.start": "开始下载...",
     "turnToRoomLog": "跳转到房间日志",
-    "turnToUsageDetail": "跳转到用量详情"
+    "turnToUsageDetail": "跳转到用量详情",
+    "date": "日期",
+    "cumulativeSessionsCount": "总时长",
+    "cumulativeWritersCount": "互动累计时长",
+    "peakSessionsCount": "总峰值",
+    "peakWritersCount": "互动峰值",
+    "cumulativeReadonlyCount": "只读累计时长",
+    "peakReadonlyCount": "只读峰值",
+    "detail": "详情",
+    "readonly": "只读",
+    "write": "互动"
 }

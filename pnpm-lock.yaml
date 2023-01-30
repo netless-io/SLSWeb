@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@ant-design/icons': ^4.6.0
+  '@ant-design/icons': ^5.0.1
   '@ant-design/plots': ^1.2.2
   '@testing-library/jest-dom': ^5.16.5
   '@testing-library/react': ^13.4.0
@@ -23,11 +23,12 @@ specifiers:
   react-i18next: ^11.18.6
   react-router-dom: ^6.6.2
   react-scripts: 5.0.1
+  tslib: ^2.5.0
   typescript: ^4.8.4
   web-vitals: ^2.1.4
 
 dependencies:
-  '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
+  '@ant-design/icons': 5.0.1_biqbaboplfbrettd7655fr4n2y
   '@ant-design/plots': 1.2.2_biqbaboplfbrettd7655fr4n2y
   '@testing-library/jest-dom': 5.16.5
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
@@ -49,6 +50,7 @@ dependencies:
   react-i18next: 11.18.6_vfm63zmruocgezzfl2v26zlzpy
   react-router-dom: 6.6.2_biqbaboplfbrettd7655fr4n2y
   react-scripts: 5.0.1_uz2ogxeagc4rbieizlfzyaazee
+  tslib: 2.5.0
   typescript: 4.8.4
   web-vitals: 2.1.4
 
@@ -72,6 +74,12 @@ packages:
       '@ctrl/tinycolor': 3.4.1
     dev: false
 
+  /@ant-design/colors/7.0.0:
+    resolution: {integrity: sha512-iVm/9PfGCbC0dSMBrz7oiEXZaaGH7ceU40OJEfKmyuzR9R5CRimJYPlRiFtMQGQcbNMea/ePcoIebi4ASGYXtg==}
+    dependencies:
+      '@ctrl/tinycolor': 3.4.1
+    dev: false
+
   /@ant-design/icons-svg/4.2.1:
     resolution: {integrity: sha512-EB0iwlKDGpG93hW8f85CTJTs4SvMX7tt5ceupvhALp1IF44SeUFOMhKUOYqpsoYWQKAOuTRDMqn75rEaKDp0Xw==}
     dev: false
@@ -84,6 +92,22 @@ packages:
       react-dom: '>=16.0.0'
     dependencies:
       '@ant-design/colors': 6.0.0
+      '@ant-design/icons-svg': 4.2.1
+      '@babel/runtime': 7.19.0
+      classnames: 2.3.2
+      rc-util: 5.24.4_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@ant-design/icons/5.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-ZyF4ksXCcdtwA/1PLlnFLcF/q8/MhwxXhKHh4oCHDA4Ip+ZzAHoICtyp4wZWfiCVDP0yuz3HsjyvuldHFb3wjA==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      '@ant-design/colors': 7.0.0
       '@ant-design/icons-svg': 4.2.1
       '@babel/runtime': 7.19.0
       classnames: 2.3.2
@@ -136,7 +160,7 @@ packages:
     resolution: {integrity: sha512-KnPEaAH+XNJMjax9U35W67nzPI+QQ2x27pYlzmSIWrbj4/k8PGrARXfzDTjwoozHJY8qG62Z+Ww6Alhu2FctXQ==}
     dependencies:
       '@antv/util': 2.0.17
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/component/0.8.28:
@@ -150,7 +174,7 @@ packages:
       '@antv/scale': 0.3.18
       '@antv/util': 2.0.17
       fecha: 4.2.3
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/coord/0.3.1:
@@ -158,13 +182,13 @@ packages:
     dependencies:
       '@antv/matrix-util': 3.1.0-beta.3
       '@antv/util': 2.0.17
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/dom-util/2.0.4:
     resolution: {integrity: sha512-2shXUl504fKwt82T3GkuT4Uoc6p9qjCKnJ8gXGLSW4T1W37dqf9AV28aCfoVPHp2BUXpSsB+PAJX2rG/jLHsLQ==}
     dependencies:
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/event-emitter/0.1.3:
@@ -184,7 +208,7 @@ packages:
       d3-interpolate: 1.4.0
       d3-timer: 1.0.10
       detect-browser: 5.3.0
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/g-canvas/0.5.12:
@@ -196,7 +220,7 @@ packages:
       '@antv/path-util': 2.0.15
       '@antv/util': 2.0.17
       gl-matrix: 3.4.3
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/g-math/0.1.7:
@@ -213,7 +237,7 @@ packages:
       '@antv/g-math': 0.1.7
       '@antv/util': 2.0.17
       detect-browser: 5.3.0
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/g2/4.2.8:
@@ -233,7 +257,7 @@ packages:
       '@antv/path-util': 2.0.15
       '@antv/scale': 0.3.18
       '@antv/util': 2.0.17
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/g2plot/2.4.20:
@@ -247,7 +271,7 @@ packages:
       fmin: 0.0.2
       pdfast: 0.2.0
       size-sensor: 1.0.1
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/matrix-util/3.0.4:
@@ -255,7 +279,7 @@ packages:
     dependencies:
       '@antv/util': 2.0.17
       gl-matrix: 3.4.3
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/matrix-util/3.1.0-beta.3:
@@ -263,7 +287,7 @@ packages:
     dependencies:
       '@antv/util': 2.0.17
       gl-matrix: 3.4.3
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/path-util/2.0.15:
@@ -271,7 +295,7 @@ packages:
     dependencies:
       '@antv/matrix-util': 3.0.4
       '@antv/util': 2.0.17
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/scale/0.3.18:
@@ -279,14 +303,14 @@ packages:
     dependencies:
       '@antv/util': 2.0.17
       fecha: 4.2.3
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@antv/util/2.0.17:
     resolution: {integrity: sha512-o6I9hi5CIUvLGDhth0RxNSFDRwXeywmt6ExR4+RmVAzIi48ps6HUy+svxOCayvrPBN37uE6TAc2KDofRo0nK9Q==}
     dependencies:
       csstype: 3.1.1
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /@apideck/better-ajv-errors/0.3.6_ajv@8.11.0:
@@ -3717,7 +3741,7 @@ packages:
     resolution: {integrity: sha512-gxGWBrTT1JuMx6R+o5PTXMmUnhnVzLQ9SNutD4YqKtI6ap897t3tKECYla6gCWEkplXnlNybEkZg9GEGxKFCgw==}
     dependencies:
       pascal-case: 3.1.2
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /camelcase-css/2.0.1:
@@ -4634,7 +4658,7 @@ packages:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /dotenv-expand/5.1.0:
@@ -7096,7 +7120,7 @@ packages:
   /lower-case/2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
     dependencies:
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /lru-cache/6.0.0:
@@ -7299,7 +7323,7 @@ packages:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /node-fetch/2.6.7:
@@ -7560,7 +7584,7 @@ packages:
     resolution: {integrity: sha512-RXlj7zCYokReqWpOPH9oYivUzLYZ5vAPIfEmCTNViosC78F8F0H9y7T7gG2M39ymgutxF5gcFEsyZQSph9Bp3A==}
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /parent-module/1.0.1:
@@ -7593,7 +7617,7 @@ packages:
     resolution: {integrity: sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.0
+      tslib: 2.5.0
     dev: false
 
   /path-exists/3.0.0:
@@ -10471,8 +10495,8 @@ packages:
     resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
     dev: false
 
-  /tslib/2.4.0:
-    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
+  /tslib/2.5.0:
+    resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: false
 
   /tsutils/3.21.0_typescript@4.8.4:

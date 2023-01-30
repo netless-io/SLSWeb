@@ -173,11 +173,10 @@ function UsageInvestigatePage() {
                                                 const match = list.find((e)=>{
                                                     return e['uuid'] === uuid;
                                                 });
-                                                console.log({match});
                                                 const mid = moment.unix(match['timestamp'] / 1000);
                                                 const to = mid.add(1, 'day') ;
                                                 const from = to.subtract(1, 'day');
-                                                const url = new URL(`${baseUrl}/normal`);
+                                                const url = new URL(`${baseUrl}`);
                                                 url.searchParams.append('uuid', uuid);
                                                 url.searchParams.append('from', from.unix().toString());
                                                 url.searchParams.append('to', to.unix().toString());
@@ -191,7 +190,10 @@ function UsageInvestigatePage() {
                                             label: t('turnToUsageDetail'),
                                             key: 'detail',
                                             onClick: ()=>{
-                                                message.info('developing');
+                                                const url = new URL(`${baseUrl}`);
+                                                url.searchParams.append('uuid', uuid);
+                                                const path = '/usageDetail' + url.search;
+                                                navigate(path);
                                             }
                                         },
                                     ]} />}>
@@ -202,7 +204,9 @@ function UsageInvestigatePage() {
                         {
                             title: t('page.usage.count'),
                             dataIndex: 'timeCount',
-                            key: 'timeCount'
+                            key: 'timeCount',
+                            defaultSortOrder: 'descend',
+                            sorter: (a, b) => a.timeCount - b.timeCount
                         },
                         {
                             title: t('page.usage.updateDate'),
