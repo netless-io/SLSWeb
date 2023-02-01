@@ -5,9 +5,8 @@ import { UsageItemType } from "../Components/UsageItemType";
 import { baseUrl } from "../utility";
 import { useLoaderData, useNavigation, useNavigate } from "react-router-dom";
 import { getPreference } from "../Components/QueryForm";
-import { URLSearchParams } from "url";
 
-const regions = [
+export const regions = [
     "cn-hz",
     "us-sv",
     "in-mum",
@@ -192,6 +191,7 @@ function UsageInvestigatePage() {
                                             onClick: ()=>{
                                                 const url = new URL(`${baseUrl}`);
                                                 url.searchParams.append('uuid', uuid);
+                                                url.searchParams.append('region', query.region);
                                                 const path = '/usageDetail' + url.search;
                                                 navigate(path);
                                             }

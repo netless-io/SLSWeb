@@ -1,4 +1,4 @@
-import { Button, Form, Input, Space, Spin, Table, message } from "antd";
+import { Button, Form, Input, Select, Space, Spin, Table, message } from "antd";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
 import { baseUrl } from "../utility";
@@ -6,9 +6,11 @@ import { useEffect, useRef, useState } from "react";
 import { FundFilled } from "@ant-design/icons";
 import ReactECharts from 'echarts-for-react';
 import moment from "moment";
+import { regions } from "./UsageInvestigatePage";
 
 export interface UsageDetailQueryType {
     uuid: string
+    region: string
 }
 
 interface UsageMinutesDetailType {
@@ -21,6 +23,7 @@ interface UsageMinutesTarget {
     start: number
     end: number
     uuid: string
+    region: string
 }
 
 interface UsageMinutesResult {
@@ -48,6 +51,7 @@ interface UsageDetailLoadResult {
 function emptyQuery(): UsageDetailQueryType {
     return {
         uuid: '',
+        region: regions[0]
     }
 }
 
@@ -63,6 +67,7 @@ export async function UsageDetailLoader(requestUrl: string): Promise<UsageDetail
     }
     const url = new URL(`${baseUrl}/roomDailyUsage`);
     url.searchParams.append('uuid', query.uuid);
+    url.searchParams.append('region', query.region);
     return new Promise((resolver, error) => {
         fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
@@ -99,6 +104,7 @@ function UsageDetailPage() {
         url.searchParams.append('uuid', minutesDetailTarget.uuid);
         url.searchParams.append('from', minutesDetailTarget.start.toString());
         url.searchParams.append('to', minutesDetailTarget.end.toString());
+        url.searchParams.append('region', minutesDetailTarget.region);
         fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
             .then(res => res.json())
             .then(res => {
@@ -116,6 +122,7 @@ function UsageDetailPage() {
     function navigateToSearchPage() {
         const url = new URL(`${baseUrl}/usageDetail`);
         url.searchParams.append('uuid', query.uuid);
+        url.searchParams.append('region', query.region);
         const newPath = '/usageDetail' + url.search
         navigate(newPath);
     }
@@ -137,6 +144,21 @@ function UsageDetailPage() {
                     rules={[{ required: true, len: 32, message: t('page.normal.uuid.warnings') }]}
                 >
                     <Input style={{ width: 300 }} type='text' placeholder={t('page.normal.uuid.placeholder')} />
+                </Form.Item>
+
+                <Form.Item
+                    label={t('page.normal.region')}
+                    name="region"
+                >
+                    <Select
+                        style={{ width: 300 }}
+                        options={regions.map(i => {
+                            return {
+                                value: i,
+                                label: t(i)
+                            }
+                        })}
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -168,8 +190,9 @@ function UsageDetailPage() {
                         title: t('detail'), dataIndex: 'timestamp', render: (e) => {
                             const start = e as unknown as number;
                             const end = start + (3600 * 24 * 1000);
+                            const region = query.region;
                             return <FundFilled style={{ color: "#52c41a" }} onClick={() => {
-                                setMinutesDetailTarget({ uuid: query.uuid, start, end: end });
+                                setMinutesDetailTarget({ uuid: query.uuid, start, end, region});
                             }} />
                         }
                     }
