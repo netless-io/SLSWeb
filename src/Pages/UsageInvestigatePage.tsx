@@ -128,7 +128,7 @@ function UsageInvestigatePage() {
                 </Form.Item>
 
                 <Form.Item
-                    label={t('page.normal.date')}
+                    label={t('page.investe.date')}
                 >
                     <Space>
                         <Form.Item

@@ -36,7 +36,7 @@
     "in-mum": "印度孟买",
     "sg": "新加坡",
     "gb-lon": "英国伦敦",
-    "page.usage.tips": "每次查询最多显示100条数据",
+    "page.usage.tips": "每次查询最多显示100条数据, \n 统计时间为该房间截止该日总用量，非单日用量。单日用量可点击详情继续查询",
     "download.start": "开始下载...",
     "turnToRoomLog": "跳转到房间日志",
     "turnToUsageDetail": "跳转到用量详情",
@@ -49,5 +49,6 @@
     "peakReadonlyCount": "只读峰值",
     "detail": "详情",
     "readonly": "只读",
-    "write": "互动"
+    "write": "互动",
+    "page.investe.date": "用量截止日期"
 }

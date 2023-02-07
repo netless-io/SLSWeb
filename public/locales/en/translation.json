@@ -36,7 +36,7 @@
     "in-mum": "in-mum",
     "sg": "sg",
     "gb-lon": "gb-lon",
-    "page.usage.tips": "Display up to 100 pieces of data per query",
+    "page.usage.tips": "Display up to 100 pieces of data per query. \n The statistical time is the total amount of the room as of that day, not a single day. Single day usage can be continued by clicking on the details",
     "download.start": "Start downloading...",
     "turnToRoomLog": "Jump to the room log",
     "turnToUsageDetail": "Jump to the usage detail",
@@ -49,5 +49,6 @@
     "peakReadonlyCount": "Peak readonly count",
     "detail": "Detail",
     "readonly": "Readonly",
-    "write": "Interaction"
+    "write": "Interaction",
+    "page.investe.date": "Usage cut-off date"
 }
