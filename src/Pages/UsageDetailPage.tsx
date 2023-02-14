@@ -162,7 +162,7 @@ function UsageDetailPage() {
                 </Form.Item>
 
                 <Form.Item
-                    help={`ISO Date`}
+                    help={`UTC+0 Date`}
                 >
                     <Button type='primary' htmlType='submit'>{t('page.normal.search')}</Button>
                 </Form.Item>
