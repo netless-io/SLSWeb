@@ -1,7 +1,7 @@
 import { ColumnsType } from "antd/lib/table";
 import { LogItemType } from "./Components/LogItemType";
 
-export const baseUrl = 'http://sls-server.netless.group:8080';
+export const baseUrl = 'https://sls-server.netless.group';
 export function getColumns(keys: string[], timeFormat: boolean): ColumnsType<LogItemType> {
     return keys.map(key => {
         let r = {
