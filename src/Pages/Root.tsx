@@ -1,4 +1,4 @@
-import { Menu, Layout, Dropdown, Typography } from "antd";
+import { Menu, Layout, Dropdown, Typography, Space, Row, Col } from "antd";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation, Outlet, useNavigation } from "react-router-dom";
 import { Pages } from "./Router";
@@ -39,15 +39,26 @@ export default function Root() {
 
     return <Layout>
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-            <Menu
-                onSelect={info => {
-                    navigate(info.key)
-                }}
-                theme="dark"
-                mode="horizontal"
-                selectedKeys={[currentKey]}
-                items={Pages.map((page) => { return { key: page, label: t(`app.page.${page}`) } })}
-            />
+            <Row justify="space-between">
+                <Col>
+                    <Menu
+                        onSelect={info => {
+                            navigate(info.key)
+                        }}
+                        theme="dark"
+                        mode="horizontal"
+                        selectedKeys={[currentKey]}
+                        items={Pages.map((page) => { return { key: page, label: t(`app.page.${page}`) } })}
+                    />
+                </Col>
+                <Col>
+                    <Dropdown overlay={lngsMenu} trigger={['click']}>
+                        <Typography.Link>
+                            {t('app.selectLanguage') + ": " + lngs[i18n.resolvedLanguage].label}
+                        </Typography.Link>
+                    </Dropdown>
+                </Col>
+            </Row>
         </Header>
 
         <Content className="site-layout" style={{ padding: '0 14px', marginTop: 60 }}>
@@ -57,13 +68,5 @@ export default function Root() {
                 </div>
             </div>
         </Content>
-
-        <Footer>
-            <Dropdown overlay={lngsMenu} trigger={['click']}>
-                <Typography.Link>
-                    {t('app.selectLanguage') + ": " + lngs[i18n.resolvedLanguage].label}
-                </Typography.Link>
-            </Dropdown>
-        </Footer>
     </Layout>
 }
