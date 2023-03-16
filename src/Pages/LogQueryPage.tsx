@@ -145,8 +145,10 @@ function LogQueryPage() {
                 defaultValue={query}
                 onValuesChange={(_, value) => {
                     const timelocation = value["timeLocation"] as string;
-                    setColumns(getColumns(value["keys"], timelocation !== ISOTimelocation));
+                    const keys = value["keys"];
+                    setColumns(getColumns(keys, timelocation !== ISOTimelocation));
                     updatePreference(value["keys"], timelocation);
+                    query.keys = keys;
                 }}
                 onFinish={(value) => {
                     query = value;

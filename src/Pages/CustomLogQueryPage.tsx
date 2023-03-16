@@ -151,8 +151,10 @@ function CustomLogQueryPage() {
                     }}
                     onValuesChange={(_, value) => {
                         const timelocation = value["timeLocation"] as string;
-                        setColumns(getColumns(value["keys"], timelocation !== ISOTimelocation));
-                        updatePreference(value["keys"], timelocation);
+                        const keys = value["keys"];
+                        setColumns(getColumns(keys, timelocation !== ISOTimelocation));
+                        updatePreference(keys, timelocation);
+                        query.keys = keys;
                     }}
                     downloadHref={getDownloadHref}
                 />
