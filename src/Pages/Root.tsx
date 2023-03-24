@@ -1,6 +1,6 @@
 import { Menu, Layout, Dropdown, Typography, Space, Row, Col } from "antd";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation, Outlet, useNavigation } from "react-router-dom";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Pages } from "./Router";
 
 const lngs = {
@@ -18,12 +18,27 @@ const lngItems = Object.keys(lngs).map(e => {
     return lngs[e];
 });
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 export default function Root() {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const userMenu = (<Menu
+        items={[
+            {
+                key: 'logout',
+                label: t('app.logout'),
+            }
+        ]}
+        onClick={() => {
+            // Clean cookies by setting the expiration date to a past date.
+            document.cookie = "UserName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "agora_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            navigate('/');
+        }}
+    />)
 
     const lngsMenu = (<Menu
         selectable
@@ -34,6 +49,12 @@ export default function Root() {
         }}
     >
     </Menu>);
+
+    const userName = document.cookie
+        .split(';')
+        .filter(e => e.trim().startsWith('UserName='))
+        .map(e => e.trim().split('=')[1])[0];
+
 
     const currentKey = (location.pathname === "/" ? "/normal" : location.pathname).replace("/", "");
 
@@ -52,11 +73,20 @@ export default function Root() {
                     />
                 </Col>
                 <Col>
-                    <Dropdown overlay={lngsMenu} trigger={['click']}>
-                        <Typography.Link>
-                            {t('app.selectLanguage') + ": " + lngs[i18n.resolvedLanguage].label}
-                        </Typography.Link>
-                    </Dropdown>
+                    <Space size={20}>
+                        <Dropdown overlay={lngsMenu} trigger={['click']}>
+                            <Typography.Link>
+                                {t('app.selectLanguage') + ": " + lngs[i18n.resolvedLanguage].label}
+                            </Typography.Link>
+                        </Dropdown>
+                        {userName &&
+                            <Dropdown overlay={userMenu} trigger={['click']}>
+                                <Typography.Link>
+                                    {"user: "+userName}
+                                </Typography.Link>
+                            </Dropdown>
+                        }
+                    </Space>
                 </Col>
             </Row>
         </Header>

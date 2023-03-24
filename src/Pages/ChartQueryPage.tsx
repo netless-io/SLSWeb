@@ -6,6 +6,7 @@ import { LogTimeLineChart } from '../Components/LogTimeLineChart';
 import { baseUrl } from '../utility';
 import { getPreference } from '../Components/QueryForm';
 import { useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { authWrappedFetch } from '../agoraSSOAuth';
 
 export interface ChartQueryType {
     uuid: string
@@ -43,7 +44,7 @@ export async function ChartQueryLoader(requestUrl: string) {
 
     const url = new URL(`${baseUrl}/customQuery/logs`);
     url.searchParams.append('from', query.from);
-    url.searchParams.append('to', (Number(query.from) + 3600*24).toString());
+    url.searchParams.append('to', (Number(query.from) + 3600 * 24).toString());
     const uuid = query.uuid;
     let suidQuery: string = "";
     if (query.suid !== undefined && query.suid !== null && query.suid.length > 0) {
@@ -51,22 +52,19 @@ export async function ChartQueryLoader(requestUrl: string) {
     }
     const slsQuery = `uuid: ${uuid} ${suidQuery} | select * from log limit ${queryLogsMaxCountPerTime}`;
     url.searchParams.append('customQuery', slsQuery);
-
-    return new Promise((resolver, error) => {
-        fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
-            .then(res => res.json())
-            .then(res => {
-                if (res["error"] !== undefined) {
-                    error(`server error: ${res["error"]}`);
-                    return;
-                }
-                let list = res["list"] as LogItemType[];
-                resolver({
-                    list: list,
-                    query
-                })
-            });
-    })
+    return authWrappedFetch(
+        requestUrl,
+        url,
+        { method: 'GET', headers: { 'Accept': 'application/json' } },
+        async (response) => {
+            const jsonObj = await response.json();
+            if (jsonObj["error"] !== undefined) {
+                throw new Error(`server error: ${jsonObj["error"]}`);
+            }
+            let list = jsonObj["list"] as LogItemType[];
+            return { list, query };
+        }
+    );
 }
 
 const queryLogsMaxCountPerTime = 10000;

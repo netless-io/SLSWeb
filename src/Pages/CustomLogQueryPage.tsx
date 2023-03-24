@@ -7,6 +7,7 @@ import { baseUrl, getColumns } from '../utility';
 import { ISOTimelocation, QueryForm, getPreference, updatePreference } from '../Components/QueryForm';
 import { useTranslation } from 'react-i18next';
 import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { authWrappedFetch } from '../agoraSSOAuth';
 
 export interface CustomLogQueryType {
     customQuery: string
@@ -71,26 +72,24 @@ export async function CustomLogQueryLoader(requestUrl: string) {
     url.searchParams.append('to', query.to);
     url.searchParams.append('page', query.page.toString());
     url.searchParams.append('pageSize', query.pageSize.toString());
-    return new Promise((resolver, error) => {
-        fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
-            .then(res => res.json())
-            .then(res => {
-                if (res["error"] !== undefined) {
-                    error(`server error: ${res["error"]}`);
-                    return;
-                }
-                let list = res["list"] as any[];
-                list = list.map((obj, index) => {
-                    obj['key'] = `${index}`;
-                    return obj;
-                });
-                resolver({
-                    count: res["count"],
-                    list: list,
-                    query
-                })
+    return await authWrappedFetch(
+        requestUrl,
+        url,
+        { method: 'GET', headers: { 'Accept': 'application/json' }},
+        async (response) => {
+            const jsonObj = await response.json();
+            if (jsonObj["error"] !== undefined) {
+                message.error(`server error: ${jsonObj["error"]}`);
+                return {};
+            }
+            let list = jsonObj["list"] as any[];
+            list = list.map((obj, index) => {
+                obj['key'] = `${index}`;
+                return obj;
             });
-    })
+            return { list, query, count: jsonObj["count"] };
+        }
+    )
 }
 
 function CustomLogQueryPage() {

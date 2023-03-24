@@ -1,4 +1,5 @@
 import {
+    LoaderFunction,
     LoaderFunctionArgs,
     createBrowserRouter,
     redirect,
@@ -9,6 +10,8 @@ import LogQueryPage, { LogQueryLoader } from './LogQueryPage';
 import UsageInvestigatePage, { UsageInvestLoader } from './UsageInvestigatePage';
 import Root from './Root';
 import UsageDetailPage, { UsageDetailLoader } from './UsageDetailPage';
+import { baseUrl } from '../utility';
+import RootErrorBoundary from './RootErrorBoundary';
 
 export const Pages = [
     'normal',
@@ -67,14 +70,25 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
-        errorElement:
-            <div id="error-page">
-                <h1>Oops! Bad path</h1>
-            </div>,
+        errorElement: <RootErrorBoundary />,
         children: [
             {
                 index: true,
                 loader: () => { return redirect('/' + Pages[0]) }
+            },
+            {
+                path: "handleSSO",
+                loader: async (args: LoaderFunctionArgs) => {
+                    // Get code and state from sourceUrl.
+                    const sourceUrl = new URL(args.request.url);
+                    const code = sourceUrl.searchParams.get("code")
+                    const state = sourceUrl.searchParams.get("state")
+                    const url = new URL(`${baseUrl}/handleAgoraSSO`);
+                    url.searchParams.append("code", code);
+                    url.searchParams.append("state", state);
+                    // Redirect to the sso url.
+                    return redirect(url.toString());
+                }
             },
             ...childrenRouters,
         ],

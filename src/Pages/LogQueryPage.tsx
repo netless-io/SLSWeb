@@ -6,6 +6,7 @@ import { getPreference, ISOTimelocation, QueryForm, updatePreference } from '../
 import { baseUrl, getColumns } from '../utility';
 import { useTranslation } from 'react-i18next';
 import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { authWrappedFetch } from '../agoraSSOAuth';
 
 export interface LogQueryType {
     uuid: string
@@ -49,7 +50,7 @@ export async function LogQueryLoader(requestUrl: string) {
     const urlSearchParams = fromUrl.searchParams;
     const query = Object.fromEntries(urlSearchParams.entries()) as unknown as LogQueryType;
     if (query.from === query.to) {
-        const redirectUrl = new URL(requestUrl.replace(`to=${query.to}`, `to=${Number(query.to) + 3600*24}`));
+        const redirectUrl = new URL(requestUrl.replace(`to=${query.to}`, `to=${Number(query.to) + 3600 * 24}`));
         const newPath = redirectUrl.pathname + redirectUrl.search;
         return redirect(newPath);
     }
@@ -72,26 +73,27 @@ export async function LogQueryLoader(requestUrl: string) {
     url.searchParams.append('to', query.to);
     url.searchParams.append('page', query.page.toString());
     url.searchParams.append('pageSize', query.pageSize.toString());
-    return new Promise((resolver, error) => {
-        fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
-            .then(res => res.json())
-            .then(res => {
-                if (res["error"] !== undefined) {
-                    error(`server error: ${res["error"]}`);
-                    return;
-                }
-                let list = res["list"] as any[];
-                list = list.map((obj, index) => {
-                    obj['key'] = `${index}`;
-                    return obj;
-                });
-                resolver({
-                    count: res["count"],
-                    list: list,
-                    query
-                })
+    return await authWrappedFetch(
+        requestUrl,
+        url,
+        { method: 'GET', headers: { 'Accept': 'application/json' } },
+        async (response: Response) => {
+            const jsonObj = await response.json();
+            if (jsonObj["error"] !== undefined) {
+                throw new Error(`server error: ${jsonObj["error"]}`);
+            }
+            let list = jsonObj["list"] as any[];
+            list = list.map((obj, index) => {
+                obj['key'] = `${index}`;
+                return obj;
             });
-    })
+            return {
+                count: jsonObj["count"],
+                list: list,
+                query
+            }
+        }
+    );
 }
 
 function LogQueryPage() {

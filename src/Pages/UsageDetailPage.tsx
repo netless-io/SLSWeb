@@ -7,6 +7,7 @@ import { FundFilled } from "@ant-design/icons";
 import ReactECharts from 'echarts-for-react';
 import moment from "moment";
 import { regions } from "./UsageInvestigatePage";
+import { authWrappedFetch } from "../agoraSSOAuth";
 
 export interface UsageDetailQueryType {
     uuid: string
@@ -68,25 +69,26 @@ export async function UsageDetailLoader(requestUrl: string): Promise<UsageDetail
     const url = new URL(`${baseUrl}/roomDailyUsage`);
     url.searchParams.append('uuid', query.uuid);
     url.searchParams.append('region', query.region);
-    return new Promise((resolver, error) => {
-        fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
-            .then(res => res.json())
-            .then(res => {
-                if (res["error"] !== undefined) {
-                    error(`server error: ${res["error"]}`);
-                    return;
-                }
-                let list = res as unknown as UsageDetailType[];
-                list = list.map((obj, index) => {
-                    obj['key'] = `${index}`;
-                    return obj;
-                });
-                resolver({
-                    list,
-                    query
-                });
+
+    return await authWrappedFetch(
+        requestUrl,
+        url,
+        { method: 'GET', headers: { 'Accept': 'application/json' } },
+        async (response) => {
+            const jsonObj = await response.json();
+            if (jsonObj["error"] !== undefined) {
+                message.error(`server error: ${jsonObj["error"]}`);
+                return { list: [], query };
+            }
+            let list = jsonObj as unknown as UsageDetailType[];
+            list = list.map((obj, index) => {
+                obj['key'] = `${index}`;
+                return obj;
             });
-    })
+            return { list, query };
+        }
+    );
+
 }
 
 function UsageDetailPage() {
@@ -114,7 +116,6 @@ function UsageDetailPage() {
                 }
                 const list = res as unknown as UsageMinutesDetailType[];
                 setMinutesDetail({ ...minutesDetailTarget, list });
-                console.log(bottomRef.current);
                 bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
             });
     }, [minutesDetailTarget]);
