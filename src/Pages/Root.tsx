@@ -34,7 +34,8 @@ export default function Root() {
         ]}
         onClick={() => {
             // Clean cookies by setting the expiration date to a past date.
-            document.cookie = "UserName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            // 注意这里的 domain 需要和后端设置的 domain 一致. 否则无法清除 cookie.
+            document.cookie = "UserName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.netless.group";
             document.cookie = "agora_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             navigate('/');
         }}
