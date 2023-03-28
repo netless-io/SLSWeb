@@ -50,5 +50,15 @@
     "detail": "Detail",
     "readonly": "Readonly",
     "write": "Interaction",
-    "page.investe.date": "Usage cut-off date"
+    "page.investe.date": "Usage cut-off date",
+    "user.indicator": "User: {{USER_NAME}}",
+    "app.logout": "Logout",
+    "backhome": "Back home",
+    "auth.error.40001": "Request fail: Access token expired, try to login again",
+    "auth.error.40002": "Request fail: Access token missing, try to login again",
+    "auth.error.40003": "Request fail: Access token invalid, try to login again",
+    "auth.error.40004": "Request fail: Team id not match, check team id again",
+    "auth.error.40005": "Request fail: Team id missing, check account again or login again",
+    "auth.error.40006": "Request fail: Room id not match, check room uuid again",
+    "auth.error.40007": "Request fail: Custom query invalid"
 }

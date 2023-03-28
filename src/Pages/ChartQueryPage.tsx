@@ -1,9 +1,9 @@
-import { Button, DatePicker, Form, Input, Space, Spin } from 'antd';
+import { Button, DatePicker, Form, Input, Space, Spin, message } from 'antd';
 import moment, { Moment } from 'moment';
 import { useTranslation } from 'react-i18next';
 import { LogItemType } from '../Components/LogItemType';
 import { LogTimeLineChart } from '../Components/LogTimeLineChart';
-import { baseUrl } from '../utility';
+import { baseUrl, errorMsgFromResponseBody } from '../utility';
 import { getPreference } from '../Components/QueryForm';
 import { useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
 import { authWrappedFetch } from '../agoraSSOAuth';
@@ -58,8 +58,10 @@ export async function ChartQueryLoader(requestUrl: string) {
         { method: 'GET', headers: { 'Accept': 'application/json' } },
         async (response) => {
             const jsonObj = await response.json();
-            if (jsonObj["error"] !== undefined) {
-                throw new Error(`server error: ${jsonObj["error"]}`);
+            const errorMsg = errorMsgFromResponseBody(jsonObj);
+            if (errorMsg !== undefined) {
+                message.error(errorMsg);
+                return { list: [], query }
             }
             let list = jsonObj["list"] as LogItemType[];
             return { list, query };

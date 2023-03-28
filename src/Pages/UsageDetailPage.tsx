@@ -1,7 +1,7 @@
 import { Button, Form, Input, Select, Space, Spin, Table, message } from "antd";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
-import { baseUrl } from "../utility";
+import { baseUrl, errorMsgFromResponseBody } from "../utility";
 import { useEffect, useRef, useState } from "react";
 import { FundFilled } from "@ant-design/icons";
 import ReactECharts from 'echarts-for-react';
@@ -76,9 +76,10 @@ export async function UsageDetailLoader(requestUrl: string): Promise<UsageDetail
         { method: 'GET', headers: { 'Accept': 'application/json' } },
         async (response) => {
             const jsonObj = await response.json();
-            if (jsonObj["error"] !== undefined) {
-                message.error(`server error: ${jsonObj["error"]}`);
-                return { list: [], query };
+            const errorMsg = errorMsgFromResponseBody(jsonObj);
+            if (errorMsg !== undefined) {
+                message.error(errorMsg);
+                return { list: [], query }
             }
             let list = jsonObj as unknown as UsageDetailType[];
             list = list.map((obj, index) => {

@@ -3,10 +3,11 @@ import moment from "moment";
 import { useState } from 'react';
 import './App.css';
 import { getPreference, ISOTimelocation, QueryForm, updatePreference } from '../Components/QueryForm';
-import { baseUrl, getColumns } from '../utility';
+import { baseUrl, errorMsgFromResponseBody, getColumns } from '../utility';
 import { useTranslation } from 'react-i18next';
 import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
 import { authWrappedFetch } from '../agoraSSOAuth';
+import { t } from 'i18next';
 
 export interface LogQueryType {
     uuid: string
@@ -79,8 +80,10 @@ export async function LogQueryLoader(requestUrl: string) {
         { method: 'GET', headers: { 'Accept': 'application/json' } },
         async (response: Response) => {
             const jsonObj = await response.json();
-            if (jsonObj["error"] !== undefined) {
-                throw new Error(`server error: ${jsonObj["error"]}`);
+            const errorMsg = errorMsgFromResponseBody(jsonObj);
+            if (errorMsg !== undefined) {
+                message.error(errorMsg);
+                return { count: 0, list: [], query }
             }
             let list = jsonObj["list"] as any[];
             list = list.map((obj, index) => {

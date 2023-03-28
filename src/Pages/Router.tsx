@@ -1,5 +1,4 @@
 import {
-    LoaderFunction,
     LoaderFunctionArgs,
     createBrowserRouter,
     redirect,
@@ -12,14 +11,25 @@ import Root from './Root';
 import UsageDetailPage, { UsageDetailLoader } from './UsageDetailPage';
 import { baseUrl } from '../utility';
 import RootErrorBoundary from './RootErrorBoundary';
+import { agoraCustomOrigin } from '../agoraSSOAuth';
 
-export const Pages = [
+const totalPages = [
     'normal',
     'custom',
     'chart',
     'usage',
     'usageDetail',
 ];
+const agoraCustomPages = [ // exclude chart and custom. due to custom sls query. not safe.
+    'normal',
+    'chart',
+    'usage',
+    'usageDetail',
+];
+
+// Get current origin.
+const origin = window.location.origin;
+export const Pages = origin === agoraCustomOrigin ? agoraCustomPages : totalPages;
 
 export const PageElement = (path: string) => {
     switch (path) {

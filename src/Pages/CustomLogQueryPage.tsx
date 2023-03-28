@@ -3,7 +3,7 @@ import moment from "moment";
 import { useState } from 'react';
 import './App.css';
 import { defaultSelKeys } from '../Const';
-import { baseUrl, getColumns } from '../utility';
+import { baseUrl, errorMsgFromResponseBody, getColumns } from '../utility';
 import { ISOTimelocation, QueryForm, getPreference, updatePreference } from '../Components/QueryForm';
 import { useTranslation } from 'react-i18next';
 import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
@@ -78,9 +78,10 @@ export async function CustomLogQueryLoader(requestUrl: string) {
         { method: 'GET', headers: { 'Accept': 'application/json' }},
         async (response) => {
             const jsonObj = await response.json();
-            if (jsonObj["error"] !== undefined) {
-                message.error(`server error: ${jsonObj["error"]}`);
-                return {};
+            const errorMsg = errorMsgFromResponseBody(jsonObj);
+            if (errorMsg !== undefined) {
+                message.error(errorMsg);
+                return { count: 0, list: [], query }
             }
             let list = jsonObj["list"] as any[];
             list = list.map((obj, index) => {

@@ -1,8 +1,10 @@
 import { ColumnsType } from "antd/lib/table";
 import { LogItemType } from "./Components/LogItemType";
+import { t } from "i18next";
 
-// export const baseUrl = 'https://sls-server.netless.group';
-export const baseUrl = 'http://localhost:8080';
+export const baseUrl = 'https://sls-server.netless.group'; // prod
+// export const baseUrl = 'http://localhost:8080'; // dev
+
 export function getColumns(keys: string[], timeFormat: boolean): ColumnsType<LogItemType> {
     return keys.map(key => {
         let r = {
@@ -38,3 +40,15 @@ export function download(href: string) {
     document.body.removeChild(a);
 }
 
+export function errorMsgFromResponseBody(jsonObj: any): string | undefined {
+    if (jsonObj["error"] !== undefined) {
+        if (jsonObj["code"] !== undefined) {
+            const errorKey = `auth.error.${jsonObj["code"]}`;
+            const displayErrorMsg = t(errorKey);
+            return displayErrorMsg;
+        } else {
+            return jsonObj["error"];
+        }
+    }
+    return undefined;
+}

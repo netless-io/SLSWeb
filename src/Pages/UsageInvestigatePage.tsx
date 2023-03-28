@@ -1,9 +1,10 @@
-import { Form, Input, Space, DatePicker, Button, Spin, Select, Table, Dropdown, Menu } from "antd";
+import { Form, Input, Space, DatePicker, Button, Spin, Select, Table, Dropdown, Menu, message } from "antd";
 import moment, { Moment } from "moment";
 import { useTranslation } from "react-i18next";
 import { UsageItemType } from "../Components/UsageItemType";
-import { baseUrl } from "../utility";
+import { baseUrl, errorMsgFromResponseBody } from "../utility";
 import { useLoaderData, useNavigation, useNavigate } from "react-router-dom";
+import { authWrappedFetch } from "../agoraSSOAuth";
 
 export const regions = [
     "cn-hz",
@@ -53,26 +54,29 @@ export async function UsageInvestLoader(requestUrl: string) {
     url.searchParams.append('region', query.region);
     url.searchParams.append('team', query.team);
 
-    return new Promise((resolver, error) => {
-        fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } })
-            .then(res => res.json())
-            .then(res => {
-                if (res["error"] !== undefined) {
-                    error(`server error: ${res["error"]}`);
-                    return;
-                }
-                let list = res["list"] as UsageItemType[];
-                list = list.map((obj, index) => {
-                    obj['key'] = `${index}`;
-                    return obj;
-                });
-                resolver({
-                    count: res["count"],
-                    list: list,
-                    query
-                })
+    return await authWrappedFetch(
+        requestUrl,
+        url,
+        { method: 'GET', headers: { 'Accept': 'application/json' } },
+        async (response) => {
+            const jsonObj = await response.json();
+            const errorMsg = errorMsgFromResponseBody(jsonObj);
+            if (errorMsg !== undefined) {
+                message.error(errorMsg);
+                return { count: 0, list: [], query }
+            }
+            let list = jsonObj["list"] as UsageItemType[];
+            list = list.map((obj, index) => {
+                obj['key'] = `${index}`;
+                return obj;
             });
-    })
+            return {
+                count: jsonObj["count"],
+                list,
+                query
+            };
+        }
+    );
 }
 
 function UsageInvestigatePage() {
@@ -135,7 +139,7 @@ function UsageInvestigatePage() {
                             noStyle
                             name='from'
                         >
-                            <DatePicker disabledDate={d=>{return d.unix() > moment.now() / 1000;}}/>
+                            <DatePicker disabledDate={d => { return d.unix() > moment.now() / 1000; }} />
                         </Form.Item>
                         <div>UTC</div>
                     </Space>
@@ -151,87 +155,87 @@ function UsageInvestigatePage() {
                 </Form.Item>
             </Form >
 
-        <Spin spinning={state === 'loading'}>
-            <Table
-                style={{ overflowX: 'scroll' }}
-                columns={[
-                    {
-                        title: t('page.normal.uuid'),
-                        dataIndex: "uuid",
-                        key: "uuid",
-                        render: (uuid) => {
-                            return <Dropdown
-                                trigger={['click']}
-                                overlay={<Menu items={[
-                                    {
-                                        label: t('turnToRoomLog'),
-                                        key: 'log',
-                                        onClick: () => {
-                                            const match = list.find((e) => {
-                                                return e['uuid'] === uuid;
-                                            });
-                                            const mid = moment.unix(match['timestamp'] / 1000);
-                                            const to = mid.add(1, 'day');
-                                            const from = to.subtract(1, 'day');
-                                            const url = new URL(`${baseUrl}`);
-                                            url.searchParams.append('uuid', uuid);
-                                            url.searchParams.append('from', from.unix().toString());
-                                            url.searchParams.append('to', to.unix().toString());
-                                            url.searchParams.append('page', '1');
-                                            url.searchParams.append('pageSize', '30');
-                                            const path = '/normal' + url.search;
-                                            navigate(path);
-                                        }
-                                    },
-                                    {
-                                        label: t('turnToUsageDetail'),
-                                        key: 'detail',
-                                        onClick: () => {
-                                            const url = new URL(`${baseUrl}`);
-                                            url.searchParams.append('uuid', uuid);
-                                            url.searchParams.append('region', query.region);
-                                            const path = '/usageDetail' + url.search;
-                                            navigate(path);
-                                        }
-                                    },
-                                ]} />}>
-                                <a onClick={(e) => e.preventDefault()}>{uuid}</a>
-                            </Dropdown>
-                        }
-                    },
-                    {
-                        title: t('page.usage.count'),
-                        dataIndex: 'timeCount',
-                        key: 'timeCount',
-                        defaultSortOrder: 'descend',
-                        sorter: (a, b) => a.timeCount - b.timeCount
-                    },
-                    {
-                        title: t('page.usage.updateDate'),
-                        dataIndex: 'timestamp',
-                        key: 'timestamp',
-                        render: (e: any) => {
-                            const n = parseInt(e);
-                            if (n <= 0) {
-                                return <div />
+            <Spin spinning={state === 'loading'}>
+                <Table
+                    style={{ overflowX: 'scroll' }}
+                    columns={[
+                        {
+                            title: t('page.normal.uuid'),
+                            dataIndex: "uuid",
+                            key: "uuid",
+                            render: (uuid) => {
+                                return <Dropdown
+                                    trigger={['click']}
+                                    overlay={<Menu items={[
+                                        {
+                                            label: t('turnToRoomLog'),
+                                            key: 'log',
+                                            onClick: () => {
+                                                const match = list.find((e) => {
+                                                    return e['uuid'] === uuid;
+                                                });
+                                                const mid = moment.unix(match['timestamp'] / 1000);
+                                                const to = mid.add(1, 'day');
+                                                const from = to.subtract(1, 'day');
+                                                const url = new URL(`${baseUrl}`);
+                                                url.searchParams.append('uuid', uuid);
+                                                url.searchParams.append('from', from.unix().toString());
+                                                url.searchParams.append('to', to.unix().toString());
+                                                url.searchParams.append('page', '1');
+                                                url.searchParams.append('pageSize', '30');
+                                                const path = '/normal' + url.search;
+                                                navigate(path);
+                                            }
+                                        },
+                                        {
+                                            label: t('turnToUsageDetail'),
+                                            key: 'detail',
+                                            onClick: () => {
+                                                const url = new URL(`${baseUrl}`);
+                                                url.searchParams.append('uuid', uuid);
+                                                url.searchParams.append('region', query.region);
+                                                const path = '/usageDetail' + url.search;
+                                                navigate(path);
+                                            }
+                                        },
+                                    ]} />}>
+                                    <a onClick={(e) => e.preventDefault()}>{uuid}</a>
+                                </Dropdown>
                             }
-                            const date = new Date(n);
-                            const str = date.toISOString();
-                            return <div>{str}</div>
+                        },
+                        {
+                            title: t('page.usage.count'),
+                            dataIndex: 'timeCount',
+                            key: 'timeCount',
+                            defaultSortOrder: 'descend',
+                            sorter: (a, b) => a.timeCount - b.timeCount
+                        },
+                        {
+                            title: t('page.usage.updateDate'),
+                            dataIndex: 'timestamp',
+                            key: 'timestamp',
+                            render: (e: any) => {
+                                const n = parseInt(e);
+                                if (n <= 0) {
+                                    return <div />
+                                }
+                                const date = new Date(n);
+                                const str = date.toISOString();
+                                return <div>{str}</div>
+                            }
                         }
-                    }
-                ]}
-                dataSource={list}
-                pagination={{
-                    showTotal: () => <div>{t('page.counter', { count })}</div>,
-                    position: ['bottomLeft'],
-                    total: count
-                }}
-                scroll={{ y: 480 }}
-                size={'small'}
-                bordered={true}
-            />
-        </Spin>
+                    ]}
+                    dataSource={list}
+                    pagination={{
+                        showTotal: () => <div>{t('page.counter', { count })}</div>,
+                        position: ['bottomLeft'],
+                        total: count
+                    }}
+                    scroll={{ y: 480 }}
+                    size={'small'}
+                    bordered={true}
+                />
+            </Spin>
         </div >
     )
 }

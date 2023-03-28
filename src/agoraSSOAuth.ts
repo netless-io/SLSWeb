@@ -1,7 +1,9 @@
-import { json, redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
+
+export const agoraCustomOrigin = "http://sls-customer.netless.group";
 
 function ssoUrl(referer: string) {
-    const redirUrl = `http://sls-customer.netless.group/handleSSO`;
+    const redirUrl = `${agoraCustomOrigin}/handleSSO`;
     const url = new URL(referer);
     const path = url.pathname;
     const search = url.searchParams.toString();
@@ -10,7 +12,7 @@ function ssoUrl(referer: string) {
     return ssoUrl;
 }
 
-export async function authWrappedFetch(referer: string, url: URL, options: RequestInit, 
+export async function authWrappedFetch(referer: string, url: URL, options: RequestInit,
     parser: (response: Response) => Promise<any>) {
     let requestInit = options;
     requestInit.credentials = 'include';
@@ -19,17 +21,5 @@ export async function authWrappedFetch(referer: string, url: URL, options: Reque
         // Mock get access token.
         return redirect(ssoUrl(referer));
     }
-    // If status start with 2, return the parser response .
-    if (response.status.toString().startsWith('2')) {
-        return await parser(response);
-    }
-    const r = await response.json();
-    const errorMsg = r["message"];
-    // Throwing other status.
-    throw json({
-        message: errorMsg
-    }, {
-        status: response.status,
-        statusText: response.statusText,
-    })
+    return await parser(response);
 }

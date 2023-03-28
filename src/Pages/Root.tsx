@@ -82,7 +82,7 @@ export default function Root() {
                         {userName &&
                             <Dropdown overlay={userMenu} trigger={['click']}>
                                 <Typography.Link>
-                                    {"user: "+userName}
+                                    {t("user.indicator", {USER_NAME: userName})}
                                 </Typography.Link>
                             </Dropdown>
                         }
