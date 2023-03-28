@@ -100,6 +100,13 @@ const router = createBrowserRouter([
                     return redirect(url.toString());
                 }
             },
+            {
+                path: "handleAgoraLogout",
+                loader: async (args: LoaderFunctionArgs) => {
+                    const url = new URL(`${baseUrl}/handleAgoraLogout`);
+                    return redirect(url.toString());
+                }
+            },
             ...childrenRouters,
         ],
     }
