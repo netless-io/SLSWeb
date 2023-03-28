@@ -1,4 +1,5 @@
 {
+    "web.title": "白板日志分析",
     "app.page.normal": "普通查询",
     "app.page.custom": "自定义查询",
     "app.page.chart": "图表查询",

@@ -1,4 +1,5 @@
 {
+    "web.title": "Whiteboard Log Analytics",
     "app.page.normal": "Room Log Query",
     "app.page.custom": "Custom Room Log Query",
     "app.page.chart": "Chart Query",
