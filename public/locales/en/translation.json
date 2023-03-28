@@ -57,8 +57,8 @@
     "auth.error.40001": "Request fail: Access token expired, try to login again",
     "auth.error.40002": "Request fail: Access token missing, try to login again",
     "auth.error.40003": "Request fail: Access token invalid, try to login again",
-    "auth.error.40004": "Request fail: Team id not match, check team id again",
-    "auth.error.40005": "Request fail: Team id missing, check account again or login again",
-    "auth.error.40006": "Request fail: Room id not match, check room uuid again",
-    "auth.error.40007": "Request fail: Custom query invalid"
+    "auth.error.40004": "Request fail: Team id not match current user account, check team id again",
+    "auth.error.40005": "Request fail: Can't find team id in current user account, try to login again",
+    "auth.error.40006": "Request fail: Room UUID not match current user account, check room UUID again",
+    "auth.error.40007": "Request fail: Custom query invalid. Check room UUID again."
 }

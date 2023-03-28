@@ -58,8 +58,8 @@
     "auth.error.40001": "请求失败: Access token 过期, 请重新登录",
     "auth.error.40002": "请求失败: Access token 不存在, 请重新登录",
     "auth.error.40003": "请求失败: Access token 无效, 请重新登录",
-    "auth.error.40004": "请求失败: Team id 不匹配, 请检查 Team id",
-    "auth.error.40005": "请求失败: 账户 Team id 不存在, 请检查 Team id 或重新登录",
-    "auth.error.40006": "请求失败: Room uuid 不匹配, 请检查 Room uuid",
-    "auth.error.40007": "请求失败: Custom query 格式不正确, 请检查"
+    "auth.error.40004": "请求失败: Team id 不存在于当前账户, 请检查 Team id 或重新登录",
+    "auth.error.40005": "请求失败: 当前账户无法查询到 Team id, 请检查 Team id 或重新登录",
+    "auth.error.40006": "请求失败: 所查询的 Room UUID 非当前账户下的 Room, 请检查 Room UUID 或重新登录",
+    "auth.error.40007": "请求失败: Custom query 格式不正确, 请检查。一般情况下请检查 Room UUID 是否正确"
 }
