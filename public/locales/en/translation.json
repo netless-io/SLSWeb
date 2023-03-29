@@ -1,5 +1,7 @@
 {
     "web.title": "Whiteboard Log Analytics",
+    "login.title": "Agora Login",
+    "login.version": "Version: {{version}}",
     "app.page.normal": "Room Log Query",
     "app.page.custom": "Custom Room Log Query",
     "app.page.chart": "Chart Query",

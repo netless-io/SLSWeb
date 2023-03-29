@@ -2,12 +2,15 @@ import { redirect } from "react-router-dom";
 
 export const agoraCustomOrigin = "http://sls-customer.netless.group";
 
-function ssoUrl(referer: string) {
+export function ssoUrl(referer: string) {
     const redirUrl = `${agoraCustomOrigin}/handleSSO`;
-    const url = new URL(referer);
-    const path = url.pathname;
-    const search = url.searchParams.toString();
-    const state = encodeURIComponent(path + '?' + search);
+    let state = "/";
+    if (referer) {
+        const url = new URL(referer);
+        const path = url.pathname;
+        const search = url.searchParams.toString();
+        state = encodeURIComponent(path + '?' + search);
+    }
     const ssoUrl = `https://sso2.agora.io/api/v0/oauth/authorize?response_type=code&client_id=flat-log&redirect_uri=${redirUrl}&scope=basic_info&state=${state}`;
     return ssoUrl;
 }

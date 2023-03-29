@@ -1,6 +1,7 @@
 import { ColumnsType } from "antd/lib/table";
 import { LogItemType } from "./Components/LogItemType";
 import { t } from "i18next";
+import { agoraCustomOrigin } from "./agoraSSOAuth";
 
 export const baseUrl = 'https://sls-server.netless.group'; // prod
 // export const baseUrl = 'http://localhost:8080'; // dev
@@ -51,4 +52,17 @@ export function errorMsgFromResponseBody(jsonObj: any): string | undefined {
         }
     }
     return undefined;
+}
+
+export function isAgoraCustomerOrigin(): boolean {
+    // Get current origin.
+    const origin = window.location.origin;
+    return origin === agoraCustomOrigin;
+}
+
+export function isLogin(): boolean {
+    return document.cookie
+        .split(';')
+        .filter(e => e.trim().startsWith('UserName='))
+        .map(e => e.trim().split('=')[1])[0].length > 0;
 }
