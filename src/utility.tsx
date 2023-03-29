@@ -60,6 +60,13 @@ export function isAgoraCustomerOrigin(): boolean {
     return origin === agoraCustomOrigin;
 }
 
+export function getUserName(): string | undefined {
+    return document.cookie
+        .split(';')
+        .filter(e => e.trim().startsWith('UserName='))
+        .map(e => e.trim().split('=')[1])[0]
+}
+
 export function isLogin(): boolean {
     const userName = document.cookie
         .split(';')

@@ -1,5 +1,5 @@
 import { Button, Space, Typography } from "antd"
-import { useLoaderData, useNavigate } from "react-router-dom"
+import { useLoaderData } from "react-router-dom"
 import { ssoUrl } from "../agoraSSOAuth";
 import { useTranslation } from "react-i18next";
 import Title from "antd/lib/typography/Title";

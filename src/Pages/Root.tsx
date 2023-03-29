@@ -2,6 +2,7 @@ import { Menu, Layout, Dropdown, Typography, Space, Row, Col } from "antd";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Pages } from "./Router";
+import { getUserName } from "../utility";
 
 const lngs = {
     en: {
@@ -47,11 +48,7 @@ export default function Root() {
     >
     </Menu>);
 
-    const userName = document.cookie
-        .split(';')
-        .filter(e => e.trim().startsWith('UserName='))
-        .map(e => e.trim().split('=')[1])[0];
-
+    const userName = getUserName();
 
     const currentKey = (location.pathname === "/" ? "/normal" : location.pathname).replace("/", "");
 
@@ -79,7 +76,7 @@ export default function Root() {
                         {userName &&
                             <Dropdown overlay={userMenu} trigger={['click']}>
                                 <Typography.Link>
-                                    {t("user.indicator", {USER_NAME: userName})}
+                                    {t("user.indicator", { USER_NAME: userName })}
                                 </Typography.Link>
                             </Dropdown>
                         }

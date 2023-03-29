@@ -12,7 +12,6 @@ import Root from './Root';
 import UsageDetailPage, { UsageDetailLoader } from './UsageDetailPage';
 import { baseUrl, isAgoraCustomerOrigin, isLogin } from '../utility';
 import RootErrorBoundary from './RootErrorBoundary';
-import { agoraCustomOrigin } from '../agoraSSOAuth';
 import LoginPage, { LoginLoadingData } from './LoginPage';
 
 const totalPages = [
@@ -28,7 +27,6 @@ const agoraCustomPages = [ // exclude chart and custom. due to custom sls query.
     'usage',
     'usageDetail',
 ];
-
 
 export const Pages = isAgoraCustomerOrigin() ? agoraCustomPages : totalPages;
 
@@ -86,39 +84,40 @@ const childrenRouters = Pages.map((page) => {
     return PageElement(page);
 });
 
-const AgoraCustomerRouters = [
-    {
-        path: "login",
-        loader: async () => {
-            return await LoginLoadingData();
+const AgoraAuthRouters = isAgoraCustomerOrigin ? [] :
+    [
+        {
+            path: "login",
+            loader: async () => {
+                return await LoginLoadingData();
+            },
+            element: <LoginPage />,
         },
-        element: <LoginPage />,
-    },
-    {
-        path: "handleSSO",
-        loader: async (args: LoaderFunctionArgs) => {
-            // Get code and state from sourceUrl.
-            const sourceUrl = new URL(args.request.url);
-            const code = sourceUrl.searchParams.get("code")
-            const state = sourceUrl.searchParams.get("state")
-            const url = new URL(`${baseUrl}/handleAgoraSSO`);
-            url.searchParams.append("code", code);
-            url.searchParams.append("state", state);
-            // Redirect to the sso url.
-            return redirect(url.toString());
+        {
+            path: "handleSSO",
+            loader: async (args: LoaderFunctionArgs) => {
+                // Get code and state from sourceUrl.
+                const sourceUrl = new URL(args.request.url);
+                const code = sourceUrl.searchParams.get("code")
+                const state = sourceUrl.searchParams.get("state")
+                const url = new URL(`${baseUrl}/handleAgoraSSO`);
+                url.searchParams.append("code", code);
+                url.searchParams.append("state", state);
+                // Redirect to the sso url.
+                return redirect(url.toString());
+            }
+        },
+        {
+            path: "handleAgoraLogout",
+            loader: async (args: LoaderFunctionArgs) => {
+                const url = new URL(`${baseUrl}/handleAgoraLogout`);
+                return redirect(url.toString());
+            }
         }
-    },
-    {
-        path: "handleAgoraLogout",
-        loader: async (args: LoaderFunctionArgs) => {
-            const url = new URL(`${baseUrl}/handleAgoraLogout`);
-            return redirect(url.toString());
-        }
-    }
-];
+    ];
 
 const router = createBrowserRouter([
-    ...AgoraCustomerRouters,
+    ...AgoraAuthRouters,
     {
         path: "/",
         element: <Root />,
