@@ -1,6 +1,6 @@
-import { Button, Form, Input, Select, Space, Spin, Table, message } from "antd";
+import { Button, Form, Input, Select, Table, message } from "antd";
 import { useTranslation } from "react-i18next";
-import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { baseUrl, errorMsgFromResponseBody } from "../utility";
 import { useEffect, useRef, useState } from "react";
 import { FundFilled } from "@ant-design/icons";
@@ -96,7 +96,6 @@ function UsageDetailPage() {
     const bottomRef = useRef(null);
     let { list, query } = useLoaderData() as UsageDetailLoadResult;
     const { t } = useTranslation();
-    const { state } = useNavigation();
     const navigate = useNavigate();
     const [minutesDetailTarget, setMinutesDetailTarget] = useState<UsageMinutesTarget | undefined>(undefined);
     const [minutesDetail, setMinutesDetail] = useState<UsageMinutesResult | undefined>(undefined);
@@ -207,8 +206,7 @@ function UsageDetailPage() {
                 }}
                 scroll={{ y: 480 }}
                 size={'small'}
-                bordered={true}
-                loading={state === 'loading'}>
+                bordered={true}>
             </Table>
         </div>
 

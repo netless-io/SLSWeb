@@ -1,8 +1,9 @@
-import { Menu, Layout, Dropdown, Typography, Space, Row, Col } from "antd";
+import { Menu, Layout, Dropdown, Typography, Space, Row, Col, Spin } from "antd";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { useNavigate, useLocation, Outlet, useNavigation } from "react-router-dom";
 import { Pages } from "./Router";
 import { getUserName } from "../utility";
+import { useState } from "react";
 
 const lngs = {
     en: {
@@ -25,6 +26,7 @@ export default function Root() {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
+    const { state } = useNavigation();
 
     const userMenu = (<Menu
         items={[
@@ -88,7 +90,9 @@ export default function Root() {
         <Content className="site-layout" style={{ padding: '0 14px', marginTop: 60 }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 720 }}>
                 <div id="detail">
-                    <Outlet />
+                    <Spin size="large" spinning={state === "loading"}>
+                        <Outlet />
+                    </Spin>
                 </div>
             </div>
         </Content>

@@ -96,7 +96,6 @@ export async function CustomLogQueryLoader(requestUrl: string) {
 function CustomLogQueryPage() {
     const [columns, setColumns] = useState(getColumns(defaultSelKeys, getPreference().timelocation === undefined));
     const { t } = useTranslation();
-    const { state } = useNavigation();
     const navigate = useNavigate();
     let { count, list, query } = useLoaderData() as CustomLogQueryResult;
 
@@ -174,8 +173,7 @@ function CustomLogQueryPage() {
                         }}
                         scroll={{ y: 480 }}
                         size={'small'}
-                        bordered={true}
-                        loading={state === 'loading'}>
+                        bordered={true}>
                     </Table>
                 </div>
             </Space>

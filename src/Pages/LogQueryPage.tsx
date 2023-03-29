@@ -182,8 +182,7 @@ function LogQueryPage() {
                     }}
                     scroll={{ y: 480 }}
                     size={'small'}
-                    bordered={true}
-                    loading={state === 'loading'}>
+                    bordered={true}>
                 </Table>
             </div>
         </div>

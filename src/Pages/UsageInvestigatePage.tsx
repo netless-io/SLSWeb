@@ -1,9 +1,9 @@
-import { Form, Input, Space, DatePicker, Button, Spin, Select, Table, Dropdown, Menu, message } from "antd";
+import { Form, Input, Space, DatePicker, Button, Select, Table, Dropdown, Menu, message } from "antd";
 import moment, { Moment } from "moment";
 import { useTranslation } from "react-i18next";
 import { UsageItemType } from "../Components/UsageItemType";
 import { baseUrl, errorMsgFromResponseBody } from "../utility";
-import { useLoaderData, useNavigation, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { authWrappedFetch } from "../agoraSSOAuth";
 
 export const regions = [
@@ -83,7 +83,6 @@ function UsageInvestigatePage() {
     let { count, list, query } = useLoaderData() as UsageInvestResult;
 
     const { t } = useTranslation();
-    const { state } = useNavigation();
     const navigate = useNavigate();
 
     function navigateWith(aQuery: UsageInvestType) {
@@ -155,87 +154,85 @@ function UsageInvestigatePage() {
                 </Form.Item>
             </Form >
 
-            <Spin spinning={state === 'loading'}>
-                <Table
-                    style={{ overflowX: 'scroll' }}
-                    columns={[
-                        {
-                            title: t('page.normal.uuid'),
-                            dataIndex: "uuid",
-                            key: "uuid",
-                            render: (uuid) => {
-                                return <Dropdown
-                                    trigger={['click']}
-                                    overlay={<Menu items={[
-                                        {
-                                            label: t('turnToRoomLog'),
-                                            key: 'log',
-                                            onClick: () => {
-                                                const match = list.find((e) => {
-                                                    return e['uuid'] === uuid;
-                                                });
-                                                const mid = moment.unix(match['timestamp'] / 1000);
-                                                const to = mid.add(1, 'day');
-                                                const from = to.subtract(1, 'day');
-                                                const url = new URL(`${baseUrl}`);
-                                                url.searchParams.append('uuid', uuid);
-                                                url.searchParams.append('from', from.unix().toString());
-                                                url.searchParams.append('to', to.unix().toString());
-                                                url.searchParams.append('page', '1');
-                                                url.searchParams.append('pageSize', '30');
-                                                const path = '/normal' + url.search;
-                                                navigate(path);
-                                            }
-                                        },
-                                        {
-                                            label: t('turnToUsageDetail'),
-                                            key: 'detail',
-                                            onClick: () => {
-                                                const url = new URL(`${baseUrl}`);
-                                                url.searchParams.append('uuid', uuid);
-                                                url.searchParams.append('region', query.region);
-                                                const path = '/usageDetail' + url.search;
-                                                navigate(path);
-                                            }
-                                        },
-                                    ]} />}>
-                                    <a onClick={(e) => e.preventDefault()}>{uuid}</a>
-                                </Dropdown>
-                            }
-                        },
-                        {
-                            title: t('page.usage.count'),
-                            dataIndex: 'timeCount',
-                            key: 'timeCount',
-                            defaultSortOrder: 'descend',
-                            sorter: (a, b) => a.timeCount - b.timeCount
-                        },
-                        {
-                            title: t('page.usage.updateDate'),
-                            dataIndex: 'timestamp',
-                            key: 'timestamp',
-                            render: (e: any) => {
-                                const n = parseInt(e);
-                                if (n <= 0) {
-                                    return <div />
-                                }
-                                const date = new Date(n);
-                                const str = date.toISOString();
-                                return <div>{str}</div>
-                            }
+            <Table
+                style={{ overflowX: 'scroll' }}
+                columns={[
+                    {
+                        title: t('page.normal.uuid'),
+                        dataIndex: "uuid",
+                        key: "uuid",
+                        render: (uuid) => {
+                            return <Dropdown
+                                trigger={['click']}
+                                overlay={<Menu items={[
+                                    {
+                                        label: t('turnToRoomLog'),
+                                        key: 'log',
+                                        onClick: () => {
+                                            const match = list.find((e) => {
+                                                return e['uuid'] === uuid;
+                                            });
+                                            const mid = moment.unix(match['timestamp'] / 1000);
+                                            const to = mid.add(1, 'day');
+                                            const from = to.subtract(1, 'day');
+                                            const url = new URL(`${baseUrl}`);
+                                            url.searchParams.append('uuid', uuid);
+                                            url.searchParams.append('from', from.unix().toString());
+                                            url.searchParams.append('to', to.unix().toString());
+                                            url.searchParams.append('page', '1');
+                                            url.searchParams.append('pageSize', '30');
+                                            const path = '/normal' + url.search;
+                                            navigate(path);
+                                        }
+                                    },
+                                    {
+                                        label: t('turnToUsageDetail'),
+                                        key: 'detail',
+                                        onClick: () => {
+                                            const url = new URL(`${baseUrl}`);
+                                            url.searchParams.append('uuid', uuid);
+                                            url.searchParams.append('region', query.region);
+                                            const path = '/usageDetail' + url.search;
+                                            navigate(path);
+                                        }
+                                    },
+                                ]} />}>
+                                <a onClick={(e) => e.preventDefault()}>{uuid}</a>
+                            </Dropdown>
                         }
-                    ]}
-                    dataSource={list}
-                    pagination={{
-                        showTotal: () => <div>{t('page.counter', { count })}</div>,
-                        position: ['bottomLeft'],
-                        total: count
-                    }}
-                    scroll={{ y: 480 }}
-                    size={'small'}
-                    bordered={true}
-                />
-            </Spin>
+                    },
+                    {
+                        title: t('page.usage.count'),
+                        dataIndex: 'timeCount',
+                        key: 'timeCount',
+                        defaultSortOrder: 'descend',
+                        sorter: (a, b) => a.timeCount - b.timeCount
+                    },
+                    {
+                        title: t('page.usage.updateDate'),
+                        dataIndex: 'timestamp',
+                        key: 'timestamp',
+                        render: (e: any) => {
+                            const n = parseInt(e);
+                            if (n <= 0) {
+                                return <div />
+                            }
+                            const date = new Date(n);
+                            const str = date.toISOString();
+                            return <div>{str}</div>
+                        }
+                    }
+                ]}
+                dataSource={list}
+                pagination={{
+                    showTotal: () => <div>{t('page.counter', { count })}</div>,
+                    position: ['bottomLeft'],
+                    total: count
+                }}
+                scroll={{ y: 480 }}
+                size={'small'}
+                bordered={true}
+            />
         </div >
     )
 }

@@ -1,11 +1,11 @@
-import { Button, DatePicker, Form, Input, Space, Spin, message } from 'antd';
+import { Button, DatePicker, Form, Input, Space, message } from 'antd';
 import moment, { Moment } from 'moment';
 import { useTranslation } from 'react-i18next';
 import { LogItemType } from '../Components/LogItemType';
 import { LogTimeLineChart } from '../Components/LogTimeLineChart';
 import { baseUrl, errorMsgFromResponseBody } from '../utility';
 import { getPreference } from '../Components/QueryForm';
-import { useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { authWrappedFetch } from '../agoraSSOAuth';
 
 export interface ChartQueryType {
@@ -74,7 +74,6 @@ export function ChartQueryPage() {
     let { list, query } = useLoaderData() as ChartQueryResult;
 
     const { t } = useTranslation();
-    const { state } = useNavigation();
     const navigate = useNavigate();
 
     const navigateToNewPath = () => {
@@ -143,10 +142,8 @@ export function ChartQueryPage() {
             </Form.Item>
         </Form>
 
-        <Spin spinning={state === 'loading'}>
-            <LogTimeLineChart
-                source={list}
-            />
-        </Spin>
+        <LogTimeLineChart
+            source={list}
+        />
     </div>
 }
