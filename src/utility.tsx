@@ -61,8 +61,10 @@ export function isAgoraCustomerOrigin(): boolean {
 }
 
 export function isLogin(): boolean {
-    return document.cookie
+    const userName = document.cookie
         .split(';')
         .filter(e => e.trim().startsWith('UserName='))
-        .map(e => e.trim().split('=')[1])[0].length > 0;
+        .map(e => e.trim().split('=')[1])[0]
+    if (userName === undefined) { return false; }
+    return userName.length > 0;
 }
