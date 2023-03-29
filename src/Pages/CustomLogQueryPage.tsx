@@ -6,7 +6,7 @@ import { defaultSelKeys } from '../Const';
 import { baseUrl, errorMsgFromResponseBody, getColumns } from '../utility';
 import { ISOTimelocation, QueryForm, getPreference, updatePreference } from '../Components/QueryForm';
 import { useTranslation } from 'react-i18next';
-import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { authWrappedFetch } from '../agoraSSOAuth';
 
 export interface CustomLogQueryType {

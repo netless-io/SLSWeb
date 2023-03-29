@@ -30,6 +30,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "start80": "sudo cross-env PORT=80 react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

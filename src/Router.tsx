@@ -4,15 +4,17 @@ import {
     createBrowserRouter,
     redirect,
 } from 'react-router-dom'
-import { ChartQueryLoader, ChartQueryPage } from './ChartQueryPage';
-import CustomLogQueryPage, { CustomLogQueryLoader } from './CustomLogQueryPage';
-import LogQueryPage, { LogQueryLoader } from './LogQueryPage';
-import UsageInvestigatePage, { UsageInvestLoader } from './UsageInvestigatePage';
-import Root from './Root';
-import UsageDetailPage, { UsageDetailLoader } from './UsageDetailPage';
-import { baseUrl, isAgoraCustomerOrigin, isLogin } from '../utility';
-import RootErrorBoundary from './RootErrorBoundary';
-import LoginPage, { LoginLoadingData } from './LoginPage';
+import { ChartQueryLoader, ChartQueryPage } from './Pages/ChartQueryPage';
+import CustomLogQueryPage, { CustomLogQueryLoader } from './Pages/CustomLogQueryPage';
+import LogQueryPage, { LogQueryLoader } from './Pages/LogQueryPage';
+import UsageInvestigatePage, { UsageInvestLoader } from './Pages/UsageInvestigatePage';
+import Home from './Pages/Home';
+import UsageDetailPage, { UsageDetailLoader } from './Pages/UsageDetailPage';
+import { baseUrl, isAgoraCustomerOrigin, isLogin } from './utility';
+import RootErrorBoundary from './Pages/RootErrorBoundary';
+import LoginPage, { LoginLoadingData } from './Pages/LoginPage';
+import LinkingPage from './Pages/LinkingPage';
+import Root from './Pages/Root';
 
 const totalPages = [
     'normal',
@@ -84,7 +86,7 @@ const childrenRouters = Pages.map((page) => {
     return PageElement(page);
 });
 
-const AgoraAuthRouters = isAgoraCustomerOrigin ? [] :
+const AgoraAuthRouters = !isAgoraCustomerOrigin ? [] :
     [
         {
             path: "login",
@@ -95,6 +97,7 @@ const AgoraAuthRouters = isAgoraCustomerOrigin ? [] :
         },
         {
             path: "handleSSO",
+            element: <LinkingPage />,
             loader: async (args: LoaderFunctionArgs) => {
                 // Get code and state from sourceUrl.
                 const sourceUrl = new URL(args.request.url);
@@ -104,12 +107,12 @@ const AgoraAuthRouters = isAgoraCustomerOrigin ? [] :
                 url.searchParams.append("code", code);
                 url.searchParams.append("state", state);
                 // Redirect to the sso url.
-                return redirect(url.toString());
+                return url.toString();
             }
         },
         {
             path: "handleAgoraLogout",
-            loader: async (args: LoaderFunctionArgs) => {
+            loader: async () => {
                 const url = new URL(`${baseUrl}/handleAgoraLogout`);
                 return redirect(url.toString());
             }
@@ -117,18 +120,32 @@ const AgoraAuthRouters = isAgoraCustomerOrigin ? [] :
     ];
 
 const router = createBrowserRouter([
-    ...AgoraAuthRouters,
     {
         path: "/",
         element: <Root />,
-        errorElement: <RootErrorBoundary />,
         children: [
+            ...AgoraAuthRouters,
             {
-                index: true,
-                loader: () => { return redirect('/' + Pages[0]) }
+                element: <Home />,
+                errorElement: <RootErrorBoundary />,
+                children: [
+                    {
+                        index: true,
+                        loader: () => { return redirect('/' + Pages[0]) }
+                    },
+                    ...childrenRouters,
+                ],
             },
-            ...childrenRouters,
-        ],
+            {
+                path: "/linking",
+                element: <LinkingPage />,
+                loader: async (args: LoaderFunctionArgs) => {
+                    const url = new URL(args.request.url);
+                    const linkUrl = url.searchParams.get('url');
+                    return linkUrl
+                }
+            }
+        ]
     }
 ]);
 

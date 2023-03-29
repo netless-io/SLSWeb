@@ -1,5 +1,5 @@
 import { Button, Space, Typography } from "antd"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, useNavigate } from "react-router-dom"
 import { ssoUrl } from "../agoraSSOAuth";
 import { useTranslation } from "react-i18next";
 import Title from "antd/lib/typography/Title";
@@ -14,6 +14,7 @@ export async function LoginLoadingData() {
 
 export default function LoginPage() {
     const data = useLoaderData();
+    const navigate = useNavigate();
     const { t } = useTranslation();
 
     // show button on the center.
@@ -25,7 +26,11 @@ export default function LoginPage() {
                 shape="round"
                 size="large"
                 icon={<img alt="agora-logo" src="./agora-logo.png" height="18px"/>}
-                href={ssoUrl('')}
+                onClick={()=>{
+                    const ssoEncodedUrl = encodeURIComponent(ssoUrl(''));
+                    const path = '/linking?url=' + ssoEncodedUrl;
+                    navigate(path);
+                }}
             >
                 {t("login.title")}
             </Button>

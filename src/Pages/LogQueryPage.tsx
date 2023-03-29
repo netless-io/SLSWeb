@@ -1,13 +1,12 @@
 import { Table, TablePaginationConfig, message } from 'antd';
 import moment from "moment";
 import { useState } from 'react';
-import './App.css';
-import { getPreference, ISOTimelocation, QueryForm, updatePreference } from '../Components/QueryForm';
-import { baseUrl, errorMsgFromResponseBody, getColumns } from '../utility';
 import { useTranslation } from 'react-i18next';
 import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { ISOTimelocation, QueryForm, getPreference, updatePreference } from '../Components/QueryForm';
 import { authWrappedFetch } from '../agoraSSOAuth';
-import { t } from 'i18next';
+import { baseUrl, errorMsgFromResponseBody, getColumns } from '../utility';
+import './App.css';
 
 export interface LogQueryType {
     uuid: string

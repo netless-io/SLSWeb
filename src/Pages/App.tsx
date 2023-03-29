@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import './App.css';
 import { RouterProvider } from 'react-router-dom'
-import router from './Router';
+import router from '../Router';
 import { useTranslation } from 'react-i18next';
 
 export default function WrappedApp() {
