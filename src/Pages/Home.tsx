@@ -3,26 +3,12 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Pages } from "../Router";
 import { getUserName } from "../utility";
-
-const lngs = {
-    en: {
-        key: 'en',
-        label: 'English'
-    },
-    zh: {
-        key: 'zh',
-        label: '简体中文'
-    }
-};
-
-const lngItems = Object.keys(lngs).map(e => {
-    return lngs[e];
-});
+import LanguagePicker from "./LanguagePicker";
 
 const { Header, Content } = Layout;
 
 export default function Home() {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -37,16 +23,6 @@ export default function Home() {
             navigate('/handleAgoraLogout');
         }}
     />)
-
-    const lngsMenu = (<Menu
-        selectable
-        items={lngItems}
-        defaultSelectedKeys={[lngs[i18n.resolvedLanguage].key]}
-        onClick={e => {
-            i18n.changeLanguage(e.key)
-        }}
-    >
-    </Menu>);
 
     const userName = getUserName();
 
@@ -68,11 +44,7 @@ export default function Home() {
                 </Col>
                 <Col>
                     <Space size={20}>
-                        <Dropdown overlay={lngsMenu} trigger={['click']}>
-                            <Typography.Link>
-                                {t('app.selectLanguage') + ": " + lngs[i18n.resolvedLanguage].label}
-                            </Typography.Link>
-                        </Dropdown>
+                        <LanguagePicker />
                         {userName &&
                             <Dropdown overlay={userMenu} trigger={['click']}>
                                 <Typography.Link>

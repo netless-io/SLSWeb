@@ -1,0 +1,43 @@
+:root {
+  --primary-100: #1e90ff;
+  --primary-200: #6fc0ff;
+  --primary-300: #e4ffff;
+  --accent-100: #000000;
+  --accent-200: #818181;
+  --text-100: #333333;
+  --text-200: #5c5c5c;
+  --bg-100: #ffffff;
+  --bg-200: #f5f5f5;
+  --bg-300: #cccccc;
+
+  font-family: -apple-system,Inter,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+}
+
+.login-bg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--bg-200);
+}
+
+.login-center {
+  background-color: var(--bg-100);
+  padding: 14px 44px;
+  margin: 14px;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.login-title {
+    font-size: 34px;
+    color: var(--text-100);
+}
+
+.login-button {
+  color: var(--primary-100);
+  background-color: var(--bg-100);
+  border-color: var(--bg-300);
+  border-width: 0.5px;
+}
