@@ -2,7 +2,7 @@ import { Table, TablePaginationConfig, message } from 'antd';
 import moment from "moment";
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { ISOTimelocation, QueryForm, getPreference, updatePreference } from '../Components/QueryForm';
 import { authWrappedFetch } from '../agoraSSOAuth';
 import { baseUrl, errorMsgFromResponseBody, getColumns } from '../utility';
@@ -103,7 +103,6 @@ function LogQueryPage() {
 
     const [columns, setColumns] = useState(getColumns(query.keys, query.timeLocation !== ISOTimelocation));
     const { t } = useTranslation();
-    const { state } = useNavigation();
     const navigate = useNavigate();
 
     const handlerTableChange = (pagination: TablePaginationConfig) => {

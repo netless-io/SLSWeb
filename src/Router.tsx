@@ -15,6 +15,7 @@ import RootErrorBoundary from './Pages/RootErrorBoundary';
 import LoginPage, { LoginLoadingData } from './Pages/LoginPage';
 import LinkingPage from './Pages/LinkingPage';
 import Root from './Pages/Root';
+import UtilityPage from './Pages/UtilityPage';
 
 const totalPages = [
     'normal',
@@ -22,12 +23,14 @@ const totalPages = [
     'chart',
     'usage',
     'usageDetail',
+    'utility'
 ];
 const agoraCustomPages = [ // exclude chart and custom. due to custom sls query. not safe.
     'normal',
     'chart',
     'usage',
     'usageDetail',
+    'utility'
 ];
 
 export const Pages = isAgoraCustomerOrigin() ? agoraCustomPages : totalPages;
@@ -77,6 +80,10 @@ export const PageElement = (path: string) => {
             loader: authCheckLoader(async (args: LoaderFunctionArgs) => {
                 return await LogQueryLoader(args.request.url);
             })
+        }
+        case 'utility': return {
+            path: 'utility',
+            element: <UtilityPage />,
         }
         default: return {}
     }
