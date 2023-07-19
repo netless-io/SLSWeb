@@ -209,6 +209,13 @@ function UsageInvestigatePage() {
                         sorter: (a, b) => a.timeCount - b.timeCount
                     },
                     {
+                        title: t('page.usage.latestDayTimeCount'),
+                        dataIndex: 'latestDayTimeCount',
+                        key: 'latestDayTimeCount',
+                        defaultSortOrder: 'descend',
+                        sorter: (a, b) => a.latestDayTimeCount - b.latestDayTimeCount
+                    },
+                    {
                         title: t('page.usage.updateDate'),
                         dataIndex: 'timestamp',
                         key: 'timestamp',
