@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import moment from "moment"
 import ReactECharts from 'echarts-for-react';
 import { Checkbox, Empty, Select } from "antd";
@@ -213,7 +214,7 @@ export function LogTimeLineChart(props: LogTimeLineChartProps) {
     const [timelineContainer] = useState(() => { return document.createElement('div') });
     const [portal, setPortal] = useState<ReactPortal | null>(null);
     const [chartState, setChartState] = useState<LogTimeLineChartState | undefined>(undefined);
-    const { interval, allData, minDate, maxDate, allDataUids = [], selectedDataUids = [] } = { ...chartState };
+    const { allData, allDataUids = [], selectedDataUids = [] } = { ...chartState };
     const yh = selectedDataUids.length * 122;
     const yAxisHeight = Math.max(Math.min(yh, 3840), 320);
 

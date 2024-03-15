@@ -197,7 +197,7 @@ function UsageInvestigatePage() {
                                         }
                                     },
                                 ]} />}>
-                                <a onClick={(e) => e.preventDefault()}>{uuid}</a>
+                                <Button>{uuid}</Button>
                             </Dropdown>
                         }
                     },
