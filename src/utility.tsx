@@ -23,6 +23,9 @@ export function getColumns(keys: string[], timeFormat: boolean): ColumnsType<Log
                 }
             } else {
                 r.render = (e: any) => {
+                    if (e === undefined) {
+                        return <div></div>
+                    }
                     const date = new Date(parseInt(e));
                     const str = date.toISOString();
                     return <div>{str}</div>

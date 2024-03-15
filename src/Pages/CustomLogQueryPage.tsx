@@ -122,7 +122,6 @@ function CustomLogQueryPage() {
     const navigateToSearchPage = (page: number, pageSize: number) => {
         const url = new URL(`${baseUrl}/customQuery/logs`);
 
-        url.searchParams.append('customQuery', query.customQuery);
         if (query.customQuery !== undefined) {
             url.searchParams.append('customQuery', query.customQuery);
         }
